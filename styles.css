@@ -1,3 +1,27 @@
+:root {
+    --bg-color: #fff;
+    --text-color: #333;
+    --text-color-light: #444;
+    --text-color-muted: #666;
+    --text-color-footer: #999;
+    --border-color: #e0e0e0;
+    --link-color: #000;
+    --link-hover-color: #666;
+    --link-underline-color: #ccc;
+}
+
+[data-theme="dark"] {
+    --bg-color: #1a1a1a;
+    --text-color: #e0e0e0;
+    --text-color-light: #d0d0d0;
+    --text-color-muted: #999;
+    --text-color-footer: #666;
+    --border-color: #333;
+    --link-color: #fff;
+    --link-hover-color: #ccc;
+    --link-underline-color: #555;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -7,26 +31,66 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     line-height: 1.7;
-    color: #333;
-    background: #fff;
+    color: var(--text-color);
+    background: var(--bg-color);
     max-width: 700px;
     margin: 0 auto;
     padding: 0 2rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 header {
     padding: 2rem 0 1rem;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--border-color);
     margin-bottom: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: border-color 0.3s ease;
 }
 
 .logo {
     display: inline-block;
 }
 
+.theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    color: var(--text-color-muted);
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+}
+
+.theme-toggle:hover {
+    color: var(--text-color);
+    background: var(--border-color);
+}
+
+.theme-toggle svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
 .logo img {
     height: 40px;
     width: auto;
+    transition: filter 0.3s ease;
+}
+
+[data-theme="dark"] .logo img {
+    filter: invert(1);
 }
 
 main {
@@ -41,12 +105,12 @@ main {
     font-size: 2.5rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: #000;
+    color: var(--link-color);
 }
 
 .tagline {
     font-size: 1.1rem;
-    color: #666;
+    color: var(--text-color-muted);
 }
 
 .content {
@@ -58,7 +122,7 @@ main {
     font-weight: 600;
     margin-top: 3rem;
     margin-bottom: 1rem;
-    color: #000;
+    color: var(--link-color);
 }
 
 .content h2:first-of-type {
@@ -67,27 +131,29 @@ main {
 
 .content p {
     margin-bottom: 1.5rem;
-    color: #444;
+    color: var(--text-color-light);
 }
 
 .content a {
-    color: #000;
+    color: var(--link-color);
     text-decoration: underline;
-    text-decoration-color: #ccc;
+    text-decoration-color: var(--link-underline-color);
     text-underline-offset: 3px;
+    transition: text-decoration-color 0.2s ease;
 }
 
 .content a:hover {
-    text-decoration-color: #666;
+    text-decoration-color: var(--link-hover-color);
 }
 
 footer {
     padding: 3rem 0;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid var(--border-color);
     margin-top: 4rem;
     text-align: center;
-    color: #999;
+    color: var(--text-color-footer);
     font-size: 0.9rem;
+    transition: border-color 0.3s ease, color 0.3s ease;
 }
 
 .social-links {
@@ -98,13 +164,17 @@ footer {
 }
 
 .social-links a {
-    color: #666;
+    color: var(--text-color-muted);
     transition: color 0.2s;
     display: inline-block;
 }
 
 .social-links a:hover {
-    color: #000;
+    color: var(--link-color);
+}
+
+.social-links svg {
+    fill: currentColor;
 }
 
 @media (max-width: 768px) {
