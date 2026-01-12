@@ -38,17 +38,15 @@
 
         <section class="content">
             <p>
-                We are team from Oxford providing end-to-end Reinforcement Learning (RL) solutions for the manufacturing industry. Manufacturing can 
-                be seen as a highly complex "game" that has been played at the human level since its inception. Our belief is that the superhuman,
-                AlphaGo moment for manufacturing is coming, where AI develops even better manufacturing strategies than the best industrial engineers. 
-                We aim to arrive at this moment by developing high-fidelity simulation models of manufacturing processes and then training RL agents to 
-                optimize them for given objectives.
+                The AlphaGo moment for manufacturing is coming, where AI discovers better strategies than even the best industrial engineers. 
+                This will be achieved through a combination of high-fidelity simulation models of manufacturing processes and Reinforcement Learning (RL)
+                techniques.
             </p>
             <p>
-                Our initial focus is on optimizing temperature control in physical manufacturing processes, involving thermal physics and material modelling. 
-                We work with our customers to develop bespoke temperature control simulations and then train RL to discover optimal strategies for them that
-                can be deployed without the need for additional hardware or robotics. We aim to expand to other processes in the future, creating a suite of 
-                simulation tools to cover a wider range of manufacturing domains.
+                We are a team from Oxford providing end-to-end Reinforcement Learning (RL) solutions for the manufacturing industry, with a focus on optimizing 
+                temperature control in physical manufacturing processes. We work with our customers to develop bespoke temperature control simulations and 
+                then train RL to discover optimal strategies for them that can be deployed without the need for additional hardware or robotics. We aim to 
+                expand to other processes in the future, creating a suite of simulation tools to cover a wider range of manufacturing domains.
             </p>
 
             <p>
@@ -78,40 +76,60 @@
     <script>
         // Theme toggle functionality
         (function() {
-            const themeToggle = document.getElementById('theme-toggle');
-            const sunIcon = themeToggle.querySelector('.sun-icon');
-            const moonIcon = themeToggle.querySelector('.moon-icon');
-            
-            // Get saved theme or default to light
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            
-            // Set initial icon visibility
-            if (savedTheme === 'dark') {
-                sunIcon.style.display = 'none';
-                moonIcon.style.display = 'block';
-            } else {
-                sunIcon.style.display = 'block';
-                moonIcon.style.display = 'none';
-            }
-            
-            // Toggle theme on click
-            themeToggle.addEventListener('click', function() {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            // Wait for DOM to be ready
+            function initTheme() {
+                const themeToggle = document.getElementById('theme-toggle');
+                if (!themeToggle) {
+                    console.error('Theme toggle button not found');
+                    return;
+                }
                 
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
+                const sunIcon = themeToggle.querySelector('.sun-icon');
+                const moonIcon = themeToggle.querySelector('.moon-icon');
                 
-                // Toggle icons
-                if (newTheme === 'dark') {
+                if (!sunIcon || !moonIcon) {
+                    console.error('Theme toggle icons not found');
+                    return;
+                }
+                
+                // Get saved theme or default to light
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                
+                // Set initial icon visibility
+                if (savedTheme === 'dark') {
                     sunIcon.style.display = 'none';
                     moonIcon.style.display = 'block';
                 } else {
                     sunIcon.style.display = 'block';
                     moonIcon.style.display = 'none';
                 }
-            });
+                
+                // Toggle theme on click
+                themeToggle.addEventListener('click', function() {
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    
+                    // Toggle icons
+                    if (newTheme === 'dark') {
+                        sunIcon.style.display = 'none';
+                        moonIcon.style.display = 'block';
+                    } else {
+                        sunIcon.style.display = 'block';
+                        moonIcon.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Initialize when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initTheme);
+            } else {
+                initTheme();
+            }
         })();
     </script>
 </body>
