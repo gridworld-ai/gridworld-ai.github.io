@@ -59,17 +59,13 @@ header {
     cursor: pointer;
     padding: 0.5rem;
     color: var(--text-color-muted);
-    transition: color 0.2s ease, background-color 0.2s ease;
+    transition: color 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 32px;
     height: 32px;
     border-radius: 4px;
-    visibility: visible;
-    opacity: 1;
-    position: relative;
-    z-index: 10;
 }
 
 .theme-toggle:hover {

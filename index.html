@@ -76,60 +76,40 @@
     <script>
         // Theme toggle functionality
         (function() {
-            // Wait for DOM to be ready
-            function initTheme() {
-                const themeToggle = document.getElementById('theme-toggle');
-                if (!themeToggle) {
-                    console.error('Theme toggle button not found');
-                    return;
-                }
+            const themeToggle = document.getElementById('theme-toggle');
+            const sunIcon = themeToggle.querySelector('.sun-icon');
+            const moonIcon = themeToggle.querySelector('.moon-icon');
+            
+            // Get saved theme or default to light
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
+            // Set initial icon visibility
+            if (savedTheme === 'dark') {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            } else {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            }
+            
+            // Toggle theme on click
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
                 
-                const sunIcon = themeToggle.querySelector('.sun-icon');
-                const moonIcon = themeToggle.querySelector('.moon-icon');
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
                 
-                if (!sunIcon || !moonIcon) {
-                    console.error('Theme toggle icons not found');
-                    return;
-                }
-                
-                // Get saved theme or default to light
-                const savedTheme = localStorage.getItem('theme') || 'light';
-                document.documentElement.setAttribute('data-theme', savedTheme);
-                
-                // Set initial icon visibility
-                if (savedTheme === 'dark') {
+                // Toggle icons
+                if (newTheme === 'dark') {
                     sunIcon.style.display = 'none';
                     moonIcon.style.display = 'block';
                 } else {
                     sunIcon.style.display = 'block';
                     moonIcon.style.display = 'none';
                 }
-                
-                // Toggle theme on click
-                themeToggle.addEventListener('click', function() {
-                    const currentTheme = document.documentElement.getAttribute('data-theme');
-                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                    
-                    document.documentElement.setAttribute('data-theme', newTheme);
-                    localStorage.setItem('theme', newTheme);
-                    
-                    // Toggle icons
-                    if (newTheme === 'dark') {
-                        sunIcon.style.display = 'none';
-                        moonIcon.style.display = 'block';
-                    } else {
-                        sunIcon.style.display = 'block';
-                        moonIcon.style.display = 'none';
-                    }
-                });
-            }
-            
-            // Initialize when DOM is ready
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', initTheme);
-            } else {
-                initTheme();
-            }
+            });
         })();
     </script>
 </body>
