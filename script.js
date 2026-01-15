@@ -1,19 +1,16 @@
-const themeToggle = document.getElementById('theme-toggle');
-if (themeToggle) {
-    const sunIcon = themeToggle.querySelector('.sun-icon');
-    const moonIcon = themeToggle.querySelector('.moon-icon');
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    if (savedTheme === 'dark') {
-        sunIcon.style.display = 'none';
-        moonIcon.style.display = 'block';
-    }
-    themeToggle.addEventListener('click', () => {
-        const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        sunIcon.style.display = newTheme === 'dark' ? 'none' : 'block';
-        moonIcon.style.display = newTheme === 'dark' ? 'block' : 'none';
+const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+const nav = document.querySelector('.nav');
+if (mobileMenuToggle && nav) {
+    mobileMenuToggle.addEventListener('click', () => {
+        nav.classList.toggle('mobile-open');
+        mobileMenuToggle.classList.toggle('active');
+    });
+    
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            nav.classList.remove('mobile-open');
+            mobileMenuToggle.classList.remove('active');
+        });
     });
 }
 
