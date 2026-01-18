@@ -1,0 +1,44 @@
+<svg viewBox="0 0 612 459" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .rl-box-bg { fill: var(--rl-box-bg, rgba(40, 40, 40, 0.6)); }
+      .rl-box-border { stroke: var(--rl-box-border, rgba(128, 128, 128, 0.4)); }
+      .rl-text { fill: var(--rl-text, #f5f5f5); }
+      .rl-arrow { stroke: var(--rl-arrow, rgba(180, 180, 180, 0.7)); }
+      .rl-label { fill: var(--rl-label, rgba(180, 180, 180, 0.9)); }
+      .rl-dashed { stroke: var(--rl-dashed, rgba(128, 128, 128, 0.5)); }
+    </style>
+    <marker id="arrowhead-rl" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="var(--rl-arrow, rgba(180, 180, 180, 0.7))"/>
+    </marker>
+  </defs>
+  
+  <!-- Agent Box -->
+  <rect x="206" y="40" width="200" height="50" rx="8" class="rl-box-bg" stroke="var(--rl-box-border, rgba(128, 128, 128, 0.4))" stroke-width="1.5"/>
+  <text x="306" y="72" text-anchor="middle" class="rl-text" font-size="16" font-weight="600" font-family="Hanken Grotesk, sans-serif">Agent</text>
+  
+  <!-- Environment Box -->
+  <rect x="206" y="369" width="200" height="50" rx="8" class="rl-box-bg" stroke="var(--rl-box-border, rgba(128, 128, 128, 0.4))" stroke-width="1.5"/>
+  <text x="306" y="401" text-anchor="middle" class="rl-text" font-size="16" font-weight="600" font-family="Hanken Grotesk, sans-serif">Environment</text>
+  
+  <!-- Arrows from Environment to Agent (R_t and S_t) - left side, curving upward -->
+  <path d="M 156 394 Q 136 230 186 65" fill="none" class="rl-arrow" stroke="var(--rl-arrow, rgba(180, 180, 180, 0.7))" stroke-width="2" marker-end="url(#arrowhead-rl)"/>
+  <text x="126" y="230" class="rl-label" font-size="11" font-weight="500" font-family="Hanken Grotesk, sans-serif">reward R<tspan font-size="9" baseline-shift="sub">t</tspan></text>
+  
+  <path d="M 156 394 Q 136 250 186 65" fill="none" class="rl-arrow" stroke="var(--rl-arrow, rgba(180, 180, 180, 0.7))" stroke-width="2" marker-end="url(#arrowhead-rl)"/>
+  <text x="126" y="250" class="rl-label" font-size="11" font-weight="500" font-family="Hanken Grotesk, sans-serif">state S<tspan font-size="9" baseline-shift="sub">t</tspan></text>
+  
+  <!-- Arrow from Agent to Environment (A_t) - right side, curving downward -->
+  <path d="M 406 65 Q 456 230 456 394" fill="none" class="rl-arrow" stroke="var(--rl-arrow, rgba(180, 180, 180, 0.7))" stroke-width="2" marker-end="url(#arrowhead-rl)"/>
+  <text x="466" y="230" class="rl-label" font-size="11" font-weight="500" font-family="Hanken Grotesk, sans-serif">action A<tspan font-size="9" baseline-shift="sub">t</tspan></text>
+  
+  <!-- Dashed vertical line indicating time transition (to the left of Environment) -->
+  <line x1="156" y1="369" x2="156" y2="419" class="rl-dashed" stroke="var(--rl-dashed, rgba(128, 128, 128, 0.5))" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.6"/>
+  
+  <!-- Arrows from Environment (R_t+1 and S_t+1) - left side, pointing left then curving up -->
+  <path d="M 206 394 L 156 394 Q 136 360 136 320 Q 116 300 186 65" fill="none" class="rl-arrow" stroke="var(--rl-arrow, rgba(180, 180, 180, 0.7))" stroke-width="2" marker-end="url(#arrowhead-rl)"/>
+  <text x="126" y="190" class="rl-label" font-size="11" font-weight="500" font-family="Hanken Grotesk, sans-serif">R<tspan font-size="9" baseline-shift="sub">t+1</tspan></text>
+  
+  <path d="M 206 394 L 156 394 Q 136 360 136 320 Q 116 320 186 65" fill="none" class="rl-arrow" stroke="var(--rl-arrow, rgba(180, 180, 180, 0.7))" stroke-width="2" marker-end="url(#arrowhead-rl)"/>
+  <text x="126" y="210" class="rl-label" font-size="11" font-weight="500" font-family="Hanken Grotesk, sans-serif">S<tspan font-size="9" baseline-shift="sub">t+1</tspan></text>
+</svg>

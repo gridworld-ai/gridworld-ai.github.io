@@ -1,19 +1,455 @@
-const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-const nav = document.querySelector('.nav');
-if (mobileMenuToggle && nav) {
-    mobileMenuToggle.addEventListener('click', () => {
+// ============================================
+// SPACETIME WARPING BACKGROUND ANIMATION
+// Physics-informed continuous deformation
+// With light/dark mode support
+// ============================================
+
+const canvas = document.getElementById('spacetime-canvas');
+const ctx = canvas.getContext('2d');
+
+// Detect color scheme preference
+function isLightMode() {
+    const theme = document.documentElement.getAttribute('data-theme');
+    if (theme === 'light') return true;
+    if (theme === 'dark') return false;
+    // Fallback to system preference
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+}
+
+// Configuration with theme support
+function getConfig() {
+    const light = isLightMode();
+    return {
+        gridSpacing: 40,
+        gridLineWidth: light ? 1 : 0.8,
+        gridColor: light ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)',
+        nodeRadius: 3,
+        nodeColor: light ? 'rgba(0, 0, 0, 0.5)' : 'rgba(255, 255, 255, 0.4)',
+        nodeRingColor: light ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.15)',
+        // Physics parameters - stronger effect while preserving topology
+        cursorMass: 70,           // Strong cursor gravitational strength
+        autonomousMass: 50,       // Autonomous mass strength
+        softeningLength: 35,      // Prevents singularities near masses
+        maxDisplacement: 18,      // Maximum displacement (must be < gridSpacing/2 to prevent intersections)
+    };
+}
+
+let CONFIG = getConfig();
+
+// Theme management
+function getStoredTheme() {
+    return localStorage.getItem('theme') || null;
+}
+
+function setTheme(theme) {
+    if (theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.removeItem('theme');
+    }
+    // Update canvas config
+    CONFIG = getConfig();
+}
+
+function initTheme() {
+    const storedTheme = getStoredTheme();
+    if (storedTheme) {
+        setTheme(storedTheme);
+    } else {
+        // Don't set theme - let CSS handle system preference via media query
+        // Just update config based on current system preference
+        const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        CONFIG = getConfig();
+    }
+}
+
+// Initialize theme on load
+initTheme();
+
+// Update config on system theme change (only if no stored preference)
+if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+        if (!getStoredTheme()) {
+            // Don't set theme attribute - let CSS handle it
+            // Just update config
+            CONFIG = getConfig();
+        }
+    });
+}
+
+// Mouse position with smooth interpolation
+let mouse = { x: -1000, y: -1000 };
+let smoothMouse = { x: -1000, y: -1000 };
+
+// Logical dimensions (for drawing)
+let width = window.innerWidth;
+let height = window.innerHeight;
+
+// Canvas resize handler
+function resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+    // Track mouse position with smoother updates
+    document.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    }, { passive: true });
+
+document.addEventListener('mouseleave', () => {
+    mouse.x = -1000;
+    mouse.y = -1000;
+});
+
+// Grid-following Point Mass that navigates intersections
+class GridNavigator {
+    constructor(mass, speed, startCol, startRow) {
+        this.mass = mass;
+        this.speed = speed;
+        
+        // Current grid cell position
+        this.gridCol = startCol;
+        this.gridRow = startRow;
+        
+        // Direction: 0=right, 1=down, 2=left, 3=up
+        this.direction = Math.floor(Math.random() * 4);
+        
+        // Progress along current segment (0 to 1) - start at intersection (0)
+        this.progress = 0;
+        
+        // Actual position - initialize at exact grid intersection
+        const spacing = CONFIG.gridSpacing;
+        this.x = startCol * spacing;
+        this.y = startRow * spacing;
+        
+        // Turn probability at intersections
+        this.turnProbability = 0.3 + Math.random() * 0.4;
+    }
+
+    update(dt) {
+        const spacing = CONFIG.gridSpacing;
+        const cols = Math.floor(width / spacing);
+        const rows = Math.floor(height / spacing);
+        
+        // Move along current direction
+        this.progress += dt * this.speed;
+        
+        // Check if we've reached an intersection
+        if (this.progress >= 1) {
+            this.progress -= 1;
+            
+            // Move to next grid cell
+            switch (this.direction) {
+                case 0: this.gridCol++; break; // right
+                case 1: this.gridRow++; break; // down
+                case 2: this.gridCol--; break; // left
+                case 3: this.gridRow--; break; // up
+            }
+            
+            // Decide whether to turn at intersection
+            if (Math.random() < this.turnProbability) {
+                // Turn left or right (not reverse)
+                const turn = Math.random() < 0.5 ? 1 : -1;
+                this.direction = (this.direction + turn + 4) % 4;
+            }
+            
+            // Boundary handling - turn around at edges with some margin
+            const margin = 3;
+            if (this.gridCol <= margin && this.direction === 2) {
+                this.direction = 0; // Turn right
+            } else if (this.gridCol >= cols - margin && this.direction === 0) {
+                this.direction = 2; // Turn left
+            }
+            if (this.gridRow <= margin && this.direction === 3) {
+                this.direction = 1; // Turn down
+            } else if (this.gridRow >= rows - margin && this.direction === 1) {
+                this.direction = 3; // Turn up
+            }
+            
+            // Keep within bounds
+            this.gridCol = Math.max(margin, Math.min(cols - margin, this.gridCol));
+            this.gridRow = Math.max(margin, Math.min(rows - margin, this.gridRow));
+        }
+        
+        // Calculate actual position with smooth interpolation between grid points
+        // Ensure exact grid alignment by using exact grid spacing
+        const baseX = this.gridCol * spacing;
+        const baseY = this.gridRow * spacing;
+        
+        // Direction vectors
+        const dx = [1, 0, -1, 0][this.direction];
+        const dy = [0, 1, 0, -1][this.direction];
+        
+        // Smooth easing for natural movement
+        const easedProgress = this.progress;
+        
+        // Calculate position ensuring it stays on grid lines
+        this.x = baseX + dx * spacing * easedProgress;
+        this.y = baseY + dy * spacing * easedProgress;
+    }
+}
+
+// Create three masses that navigate the grid
+const masses = [
+    new GridNavigator(CONFIG.autonomousMass * 1.2, 0.8, 8, 5),
+    new GridNavigator(CONFIG.autonomousMass * 1.0, 1.0, 15, 10),
+    new GridNavigator(CONFIG.autonomousMass * 1.3, 0.9, 22, 7),
+    new GridNavigator(CONFIG.autonomousMass * 1.4, 1.1, 30, 12),
+    new GridNavigator(CONFIG.autonomousMass * 1.5, 1.2, 38, 9),
+];
+
+// Physics-informed gravitational potential
+// Uses Plummer softening to prevent singularities: φ = -M / sqrt(r² + ε²)
+function calculatePotentialGradient(px, py, massX, massY, mass, softening) {
+    const dx = px - massX;
+    const dy = py - massY;
+    const r2 = dx * dx + dy * dy;
+    const softened = Math.sqrt(r2 + softening * softening);
+    
+    // Gradient of Plummer potential: ∇φ = M * r / (r² + ε²)^(3/2)
+    const factor = mass / (softened * softened * softened);
+    
+    return {
+        gx: -dx * factor,
+        gy: -dy * factor
+    };
+}
+
+// Calculate displacement using proper potential field superposition
+function calculateDisplacement(px, py, allMasses, mouseX, mouseY) {
+    let totalGx = 0;
+    let totalGy = 0;
+
+    // Superpose gravitational influences from all masses
+    for (const mass of allMasses) {
+        const { gx, gy } = calculatePotentialGradient(
+            px, py, mass.x, mass.y, mass.mass, CONFIG.softeningLength
+        );
+        totalGx += gx;
+        totalGy += gy;
+    }
+
+    // Add cursor influence with same physics
+    if (mouseX > 0 && mouseY > 0) {
+        const { gx, gy } = calculatePotentialGradient(
+            px, py, mouseX, mouseY, CONFIG.cursorMass, CONFIG.softeningLength * 0.8
+        );
+        totalGx += gx;
+        totalGy += gy;
+    }
+
+    // Scale to visual displacement - balanced for smooth, visible effect
+    const scale = 1000;
+    let dx = totalGx * scale;
+    let dy = totalGy * scale;
+
+    // Strict clamp to prevent topology violations (grid lines crossing)
+    // Critical: maxDisplacement must be < gridSpacing/2 to guarantee no intersections
+    // Using smooth tanh limiting ensures continuous, differentiable warping
+    const magnitude = Math.sqrt(dx * dx + dy * dy);
+    if (magnitude > 0) {
+        const maxDisp = CONFIG.maxDisplacement;
+        // Tanh limiting: smooth, continuous, and strictly bounded
+        // tanh(x) approaches 1 as x -> infinity, so limited <= maxDisp always
+        const limited = maxDisp * Math.tanh(magnitude / maxDisp);
+        const ratio = limited / magnitude;
+        dx *= ratio;
+        dy *= ratio;
+    }
+
+    return { dx, dy };
+}
+
+// Pre-calculate warped grid positions for consistency
+function calculateWarpedGrid() {
+    const spacing = CONFIG.gridSpacing;
+    const cols = Math.ceil(width / spacing) + 4;
+    const rows = Math.ceil(height / spacing) + 4;
+    const offsetX = -spacing * 2;
+    const offsetY = -spacing * 2;
+    
+    const grid = [];
+    
+    for (let row = 0; row <= rows; row++) {
+        grid[row] = [];
+        const baseY = offsetY + row * spacing;
+        
+        for (let col = 0; col <= cols; col++) {
+            const baseX = offsetX + col * spacing;
+            const { dx, dy } = calculateDisplacement(baseX, baseY, masses, smoothMouse.x, smoothMouse.y);
+            grid[row][col] = {
+                x: baseX + dx,
+                y: baseY + dy
+            };
+        }
+    }
+    
+    return { grid, rows, cols };
+}
+
+// Draw the warped grid using pre-calculated positions
+function drawGrid() {
+    const { grid, rows, cols } = calculateWarpedGrid();
+
+    ctx.strokeStyle = CONFIG.gridColor;
+    ctx.lineWidth = CONFIG.gridLineWidth;
+
+    // Draw horizontal lines
+    for (let row = 0; row <= rows; row++) {
+        ctx.beginPath();
+        for (let col = 0; col <= cols; col++) {
+            const pt = grid[row][col];
+            if (col === 0) {
+                ctx.moveTo(pt.x, pt.y);
+            } else {
+                ctx.lineTo(pt.x, pt.y);
+            }
+        }
+        ctx.stroke();
+    }
+
+    // Draw vertical lines
+    for (let col = 0; col <= cols; col++) {
+        ctx.beginPath();
+        for (let row = 0; row <= rows; row++) {
+            const pt = grid[row][col];
+            if (row === 0) {
+                ctx.moveTo(pt.x, pt.y);
+            } else {
+                ctx.lineTo(pt.x, pt.y);
+            }
+        }
+        ctx.stroke();
+    }
+}
+
+// Draw subtle node markers at mass positions
+function drawNodes() {
+    for (const mass of masses) {
+        // Calculate where the node appears in warped space
+        const { dx, dy } = calculateDisplacement(mass.x, mass.y, 
+            masses.filter(m => m !== mass), smoothMouse.x, smoothMouse.y);
+        const nodeX = mass.x + dx * 0.3;
+        const nodeY = mass.y + dy * 0.3;
+        
+        // Draw a subtle mathematical node - small filled circle
+        ctx.beginPath();
+        ctx.arc(nodeX, nodeY, CONFIG.nodeRadius, 0, Math.PI * 2);
+        ctx.fillStyle = CONFIG.nodeColor;
+        ctx.fill();
+        
+        // Outer ring for elegance
+        ctx.beginPath();
+        ctx.arc(nodeX, nodeY, CONFIG.nodeRadius * 2.2, 0, Math.PI * 2);
+        ctx.strokeStyle = CONFIG.nodeRingColor;
+        ctx.lineWidth = 0.6;
+        ctx.stroke();
+    }
+}
+
+// Animation loop
+let lastTime = 0;
+
+function animate(currentTime) {
+    const dt = Math.min((currentTime - lastTime) / 1000, 0.1);
+    lastTime = currentTime;
+
+    // Smooth mouse interpolation for natural feel
+    const smoothing = 0.15;
+    smoothMouse.x += (mouse.x - smoothMouse.x) * smoothing;
+    smoothMouse.y += (mouse.y - smoothMouse.y) * smoothing;
+
+    // Clear canvas
+    ctx.clearRect(0, 0, width, height);
+
+    // Update masses
+    for (const mass of masses) {
+        mass.update(dt);
+    }
+
+    // Draw elements
+    drawGrid();
+    drawNodes();
+
+    requestAnimationFrame(animate);
+}
+
+// Start animation
+requestAnimationFrame(animate);
+
+
+// ============================================
+// EXISTING SITE FUNCTIONALITY
+// ============================================
+
+// Mobile menu toggle
+function initMobileMenu() {
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const nav = document.querySelector('.nav');
+    const navRight = document.querySelector('.nav-right');
+
+    if (!mobileMenuToggle || !nav || !navRight) return;
+
+    function closeMobileMenu() {
+        nav.classList.remove('mobile-open');
+        mobileMenuToggle.classList.remove('active');
+    }
+
+    mobileMenuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
         nav.classList.toggle('mobile-open');
         mobileMenuToggle.classList.toggle('active');
     });
     
+    // Close menu when clicking on nav links
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.addEventListener('click', () => {
-            nav.classList.remove('mobile-open');
-            mobileMenuToggle.classList.remove('active');
+            closeMobileMenu();
         });
+    });
+    
+    // Prevent clicks inside the menu from closing it
+    navRight.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+    
+    // Close menu when clicking outside (on the backdrop)
+    document.addEventListener('click', (e) => {
+        if (nav.classList.contains('mobile-open')) {
+            // Check if click is outside the menu
+            if (!navRight.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                closeMobileMenu();
+            }
+        }
+    });
+    
+    // Close menu on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && nav.classList.contains('mobile-open')) {
+            closeMobileMenu();
+        }
     });
 }
 
+// Initialize mobile menu when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileMenu);
+} else {
+    initMobileMenu();
+}
+
+// Intersection observer for fade-in animations
 const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('is-visible');
@@ -27,21 +463,7 @@ document.querySelectorAll('.fade-in, .fade-in-item').forEach(el => {
     observer.observe(el);
 });
 
-const heroBg = document.querySelector('.hero-bg');
-const aboutBg = document.querySelector('.about-bg');
-if (heroBg) heroBg.classList.add('active');
-
-const sectionObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            document.querySelectorAll('.section-bg').forEach(bg => bg.classList.remove('active'));
-            (entry.target.id === 'about' ? aboutBg : heroBg)?.classList.add('active');
-        }
-    });
-}, { threshold: 0.3 });
-
-[document.querySelector('.hero'), document.querySelector('#about')].forEach(el => el && sectionObserver.observe(el));
-
+// Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', e => {
         const href = anchor.getAttribute('href');
@@ -53,3 +475,170 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+// Theme toggle button
+const themeToggle = document.getElementById('theme-toggle');
+if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 
+                            (isLightMode() ? 'light' : 'dark');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        setTheme(newTheme);
+    });
+}
+
+// Sticky navbar scroll detection
+function handleNavbarScroll() {
+    const hero = document.querySelector('.hero');
+    if (!hero) return;
+    
+    const heroBottom = hero.getBoundingClientRect().bottom;
+    const scrollThreshold = 100; // Show border when scrolled past this point
+    
+    if (window.scrollY > scrollThreshold || heroBottom < scrollThreshold) {
+        document.body.classList.add('scrolled');
+    } else {
+        document.body.classList.remove('scrolled');
+    }
+}
+
+// Check on scroll and on load
+window.addEventListener('scroll', handleNavbarScroll);
+window.addEventListener('resize', handleNavbarScroll);
+handleNavbarScroll(); // Initial check
+
+// ============================================
+// CONTACT FORM HANDLING (Web3Forms)
+// ============================================
+
+function initContactForm() {
+    const form = document.getElementById('contact-form');
+    const result = document.getElementById('form-result');
+    const submitButton = form?.querySelector('.form-submit');
+    
+    if (!form || !result) return;
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(form);
+        const object = Object.fromEntries(formData);
+        const json = JSON.stringify(object);
+        
+        result.innerHTML = "Please wait...";
+        result.className = "form-message show";
+        
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = "Sending...";
+        }
+        
+        fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: json
+        })
+        .then(async (response) => {
+            let json = await response.json();
+            if (response.status == 200) {
+                result.innerHTML = json.message;
+                result.className = "form-message show success";
+            } else {
+                console.log(response);
+                result.innerHTML = json.message || "Something went wrong. Please try again.";
+                result.className = "form-message show error";
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            result.innerHTML = "Something went wrong! Please try again or email us directly at contact@gridworld.ai";
+            result.className = "form-message show error";
+        })
+        .then(function() {
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = "Submit";
+            }
+            form.reset();
+            setTimeout(() => {
+                result.className = "form-message";
+                result.innerHTML = "";
+            }, 5000);
+        });
+    });
+}
+
+// Initialize contact form when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initContactForm);
+} else {
+    initContactForm();
+}
+
+// ============================================
+// IMAGE PROTECTION - Prevent copying/saving images (except logos)
+// ============================================
+
+function initImageProtection() {
+    // Select all images except logos
+    const protectedImages = document.querySelectorAll('img:not(.logo img):not(.footer-logo img)');
+    
+    protectedImages.forEach(img => {
+        // Prevent right-click context menu
+        img.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Prevent drag start
+        img.addEventListener('dragstart', (e) => {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Prevent selecting images
+        img.addEventListener('selectstart', (e) => {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Add CSS class for additional protection
+        img.classList.add('protected-image');
+    });
+    
+    // Prevent keyboard shortcuts for saving images
+    document.addEventListener('keydown', (e) => {
+        // Prevent Ctrl+S, Ctrl+Shift+S, Ctrl+U
+        if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) {
+            const activeElement = document.activeElement;
+            const isImageSelected = activeElement && activeElement.tagName === 'IMG' && 
+                                   !activeElement.closest('.logo') && 
+                                   !activeElement.closest('.footer-logo');
+            if (isImageSelected) {
+                e.preventDefault();
+                return false;
+            }
+        }
+    });
+    
+    // Prevent image dragging
+    document.addEventListener('dragstart', (e) => {
+        if (e.target.tagName === 'IMG' && 
+            !e.target.closest('.logo') && 
+            !e.target.closest('.footer-logo')) {
+            e.preventDefault();
+            return false;
+        }
+    });
+}
+
+// Initialize image protection when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initImageProtection);
+} else {
+    initImageProtection();
+}
+

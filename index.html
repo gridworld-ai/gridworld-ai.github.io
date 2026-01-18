@@ -8,21 +8,18 @@
     <link rel="apple-touch-icon" href="images/gridworld.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
     <body>
-    <!-- Section-specific backgrounds -->
-    <div class="section-bg hero-bg">
-        <div class="grid-pattern"></div>
-    </div>
-    <div class="section-bg about-bg">
-        <div class="grid-pattern"></div>
-    </div>
+    <!-- Spacetime canvas background -->
+    <canvas id="spacetime-canvas"></canvas>
     <header>
         <nav class="nav">
             <div class="logo">
-                <img src="images/gridworld.svg" alt="Gridworld">
+                <a href="#hero">
+                    <img src="images/gridworld.svg" alt="Gridworld">
+                </a>
             </div>
             <button class="mobile-menu-toggle" aria-label="Toggle menu" id="mobile-menu-toggle">
                 <span></span>
@@ -30,60 +27,75 @@
                 <span></span>
             </button>
             <div class="nav-right">
+                <button class="theme-toggle" aria-label="Toggle theme" id="theme-toggle">
+                    <svg class="theme-icon sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="theme-icon moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
                 <div class="nav-links">
                     <a href="#about">About</a>
                     <a href="#approach">Approach</a>
-                    <a href="#technology">Technology</a>
-                    <a href="#team">Team</a>
-                    <a href="#contact">Contact</a>
+                    <a href="#contact" class="nav-cta">Book a Demo</a>
                 </div>
             </div>
         </nav>
     </header>
 
     <main>
-        <section class="hero fade-in">
+        <section id="hero" class="hero fade-in">
             <h1 class="hero-title">AI for Industrial Processes</h1>
-            <p class="hero-subtitle fade-in-delay">Optimizing industrial temperature control systems with AI</p>
+            <p class="hero-subtitle fade-in-delay">Optimizing industrial control systems with AI</p>
             <div class="hero-cta fade-in-delay-2">
-                <a href="#contact" class="cta-link">Contact us</a>
+                <a href="#contact" class="cta-link">Book a Demo</a>
             </div>
         </section>
 
         <section id="about" class="intro fade-in">
-            <h2 class="section-title">About us</h2>
-            <p class="fade-in-delay">We are an applied research company specialized in solving complex physical problems with AI. Our solutions combine high-fidelity simulation models with reinforcement learning (RL) to deliver measurable improvements in efficiency and quality for manufacturing operations.</p>
+            <h2 class="section-title">About Us</h2>
+            <p class="fade-in-delay">Gridworld is an applied research company optimizing complex industrial processes with AI. Our solutions combine high-fidelity simulation models with reinforcement learning (RL) to deliver improvements in operational efficiency and product quality.</p>
+            <a href="#team" class="cta-link fade-in-delay-2">Meet the Team</a>
         </section>
 
         <section id="approach" class="approach fade-in">
-            <h2 class="section-title">Our approach</h2>
+            <h2 class="section-title">Our Approach</h2>
             <div class="approach-list">
                 <div class="approach-item fade-in-item">
                     <span class="approach-number">01</span>
                     <div class="approach-content">
                         <h3>High-Fidelity Simulation</h3>
-                        <p>Accurate thermal models of your industrial processes, capturing heat transfer, material properties, and process dynamics</p>
+                        <p>Accurate models of your industrial processes, capturing physics, material properties, and process dynamics</p>
                     </div>
                 </div>
                 <div class="approach-item fade-in-item">
                     <span class="approach-number">02</span>
                     <div class="approach-content">
                         <h3>AI-Powered Optimization</h3>
-                        <p>Reinforcement learning agents discover optimal temperature control strategies that improve efficiency and product quality</p>
+                        <p>Reinforcement learning agents discover optimal control strategies that improve efficiency and product quality</p>
                     </div>
                 </div>
                 <div class="approach-item fade-in-item">
                     <span class="approach-number">03</span>
                     <div class="approach-content">
                         <h3>Seamless Integration</h3>
-                        <p>Solutions tailored to your specific temperature control systems, deployed with minimal additional hardware</p>
+                        <p>Solutions tailored to your specific control systems, deployed with minimal additional hardware</p>
                     </div>
                 </div>
                 <div class="approach-item fade-in-item">
                     <span class="approach-number">04</span>
                     <div class="approach-content">
                         <h3>Post-training Improvement</h3>
-                        <p>Post-training on real-world performance data further improves the temperature control strategies</p>
+                        <p>Post-training on real-world performance data further improves the control strategies</p>
                     </div>
                 </div>
                 <div class="approach-item fade-in-item">
@@ -98,86 +110,164 @@
 
         <section id="technology" class="technology fade-in">
             <h2 class="section-title">Our Technology</h2>
-            <p class="section-intro fade-in-delay">We combine two powerful technologies to transform industrial process control</p>
-            
             <div class="tech-grid">
                 <div class="tech-card fade-in-item">
+                    <div class="tech-image digital-twin-container">
+                        <img src="images/digital-twin-sample.jpg" alt="Digital Twin Visualization" class="digital-twin-image">
+                    </div>
                     <h3>Digital Twins</h3>
-                    <p class="tech-description">A digital twin is a high-fidelity virtual replica of your physical industrial system—capturing thermal dynamics, material properties, and process behavior with precision.</p>
-                    <div class="tech-highlight">
-                        <span class="highlight-label">Our Edge</span>
-                        <p>Unlike traditional digital twins built for monitoring, ours are <strong>purpose-built for AI training</strong>. They're computationally efficient, enabling millions of simulated experiments that would be impossible on real hardware.</p>
-                    </div>
-                    <ul class="tech-benefits">
-                        <li>Risk-free experimentation at scale</li>
-                        <li>Optimized for rapid RL iteration</li>
-                        <li>Validated against real-world data</li>
-                    </ul>
+                    <p class="tech-description">Unlike traditional digital twins built for monitoring, ours are <strong>purpose-built for AI training</strong>. They're computationally efficient, enabling accelerated simulated experiments necessary for AI training.</p>
                 </div>
-                
                 <div class="tech-card fade-in-item">
-                    <h3>Reinforcement Learning</h3>
-                    <p class="tech-description">Reinforcement learning is an AI paradigm where intelligent agents learn optimal control strategies through trial and error—receiving rewards for actions that improve outcomes.</p>
-                    <div class="tech-highlight">
-                        <span class="highlight-label">Why It Matters</span>
-                        <p>RL agents can discover <strong>non-intuitive strategies</strong> that outperform decades of hand-tuned controllers. They continuously adapt, finding optimal trade-offs between efficiency, quality, and throughput.</p>
+                    <div class="tech-image rl-diagram-container">
+                        <img src="images/rl-loop-sample.png" alt="Reinforcement Learning Process" class="rl-loop-image">
                     </div>
-                    <ul class="tech-benefits">
-                        <li>Learns beyond human intuition</li>
-                        <li>Handles complex, dynamic systems</li>
-                        <li>Improves with real-world feedback</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="tech-synergy fade-in-item">
-                <div class="synergy-content">
-                    <h4>The Synergy</h4>
-                    <p>Our efficient digital twins enable RL agents to train on <strong>millions of scenarios</strong> in hours—exploring edge cases, failure modes, and optimization opportunities that would take years to encounter in the real world. The result: AI controllers that are battle-tested before they ever touch your production line.</p>
+                    <h3>Reinforcement Learning</h3>
+                    <p class="tech-description">Reinforcement learning is an AI paradigm where intelligent agents learn optimal strategies beyond human intuition that outperform decades of hand-tuned controllers through iterative loop-based training.</p>
                 </div>
             </div>
         </section>
 
         <section id="team" class="team fade-in">
-            <h2 class="section-title">Our Team</h2>
-            <p class="section-intro fade-in-delay">Our engineers bring deep expertise in machine learning, control engineering, mechanics, and thermodynamics—the perfect combination for building AI that understands physical systems.</p>
+            <h2 class="section-title">Built by Oxford Engineers</h2>
+            <p class="section-intro fade-in-delay">Our team brings deep technical expertise in machine learning and control engineering, as well as industry and research experience in building AI for physical systems.</p>
             
             <div class="team-grid">
                 <div class="team-member fade-in-item">
+                    <div class="member-photo">
+                        <img src="images/john_lee.jpeg" alt="John Lee">
+                    </div>
                     <div class="member-info">
                         <h3>John Lee</h3>
                         <span class="member-role">CEO</span>
                     </div>
-                    <p class="member-background">MEng Oxford EngSci; prev. optimized quantum environments for Multi-Agent RL in the Quantum Device Lab; ex-president of OxNeurotech; ex-subteam lead at Team ORION.</p>
+                    <div class="member-social-links">
+                        <a href="https://www.linkedin.com/in/lee-chih-jung" target="_blank" rel="noopener noreferrer" class="member-linkedin" aria-label="John Lee LinkedIn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                        &nbsp;
+                        <a href="https://www.x.com/lordjatonyas" target="_blank" rel="noopener noreferrer" class="member-linkedin" aria-label="John Lee X">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
                 
                 <div class="team-member fade-in-item">
+                    <div class="member-photo">
+                        <img src="images/yuhe_gao.jpeg" alt="Yuhe Gao">
+                    </div>
                     <div class="member-info">
                         <h3>Yuhe Gao</h3>
                         <span class="member-role">CTO</span>
                     </div>
-                    <p class="member-background">MEng Oxford EngSci; Multi-Agent RL research supervised by Professor Jakob Foerster; prev. research in the Oxford Synthetic Biology Group, industry experience deploying time-series machine learning and control methods for wearable devices.</p>
+                    <a href="https://www.linkedin.com/in/yuhe-gao" target="_blank" rel="noopener noreferrer" class="member-linkedin" aria-label="Yuhe Gao LinkedIn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
                 </div>
             </div>
         </section>
 
         <section id="contact" class="contact fade-in">
             <h2 class="section-title">Get in Touch</h2>
-            <p class="fade-in-delay">For business inquiries, please reach out to <a href="mailto:contact@gridworld.ai">contact@gridworld.ai</a></p>
+            <div class="contact-container">
+                <div class="contact-form-wrapper">
+                    <form id="contact-form" class="contact-form fade-in-delay-2">
+                        <input type="hidden" name="access_key" value="b4878abc-af33-4e3b-817a-6cea09e0e817">
+                        <input type="hidden" name="subject" value="New Contact Form Submission from Gridworld Website">
+                        <input type="checkbox" name="botcheck" id="" style="display: none;">
+                        <div class="form-group">
+                            <input type="text" name="name" placeholder="Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="company" placeholder="Company">
+                        </div>
+                        <div class="form-group">
+                            <textarea name="message" rows="6" placeholder="How can we help?" required></textarea>
+                        </div>
+                        <button type="submit" class="cta-link form-submit">Submit</button>
+                        <div id="form-result" class="form-message"></div>
+                    </form>
+                </div>
+                <div class="contact-benefits fade-in-delay-2">
+                    <h3>Optimize your industrial processes with AI</h3>
+                    <ul class="benefits-list">
+                        <li>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                                <path d="M2 17l10 5 10-5"></path>
+                                <path d="M2 12l10 5 10-5"></path>
+                            </svg>
+                            <span>Get a demo with our team</span>
+                        </li>
+                        <li>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                            <span>Map out your optimization opportunities</span>
+                        </li>
+                        <li>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                            </svg>
+                            <span>Get started with a pilot on your live system</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </section>
     </main>
 
     <footer>
-        <div class="footer-logo">
-            <img src="images/gridworld.svg" alt="Gridworld">
+        <div class="footer-content">
+            <div class="footer-column footer-branding">
+                <div class="footer-logo">
+                    <img src="images/gridworld.svg" alt="Gridworld">
+                </div>
+            </div>
+            <div class="footer-column footer-navigation">
+                <h4 class="footer-column-title">Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#approach">Approach</a></li>
+                    <li><a href="#contact">Book a Demo</a></li>
+                </ul>
+            </div>
+            <div class="footer-column footer-social">
+                <h4 class="footer-column-title">Social</h4>
+                <ul class="footer-links">
+                    <li>
+                        <a href="https://www.linkedin.com/company/gridworld" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="footer-column footer-contact">
+                <h4 class="footer-column-title">Contact</h4>
+                <ul class="footer-links">
+                    <li><a href="mailto:contact@gridworld.ai">contact@gridworld.ai</a></li>
+                    <li>Oxford, United Kingdom</li>
+                </ul>
+            </div>
         </div>
-        <p>© 2026 Gridworld. All rights reserved.</p>
-        <div class="social-links">
-            <a href="https://www.linkedin.com/company/gridworld" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                </svg>
-            </a>
+        <div class="footer-divider"></div>
+        <div class="footer-copyright">
+            <p>© 2026 Gridworld. All rights reserved.</p>
         </div>
     </footer>
 
