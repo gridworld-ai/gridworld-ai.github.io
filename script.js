@@ -1,22 +1,14 @@
-// ============================================
-// SPACETIME WARPING BACKGROUND ANIMATION
-// Physics-informed continuous deformation
-// With light/dark mode support
-// ============================================
-
+// Spacetime canvas background
 const canvas = document.getElementById('spacetime-canvas');
 const ctx = canvas.getContext('2d');
 
-// Detect color scheme preference
 function isLightMode() {
     const theme = document.documentElement.getAttribute('data-theme');
     if (theme === 'light') return true;
     if (theme === 'dark') return false;
-    // Fallback to system preference
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
 }
 
-// Configuration with theme support
 function getConfig() {
     const light = isLightMode();
     return {
@@ -26,17 +18,15 @@ function getConfig() {
         nodeRadius: 3,
         nodeColor: light ? 'rgba(0, 0, 0, 0.5)' : 'rgba(255, 255, 255, 0.4)',
         nodeRingColor: light ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.15)',
-        // Physics parameters - stronger effect while preserving topology
-        cursorMass: 70,           // Strong cursor gravitational strength
-        autonomousMass: 50,       // Autonomous mass strength
-        softeningLength: 35,      // Prevents singularities near masses
-        maxDisplacement: 18,      // Maximum displacement (must be < gridSpacing/2 to prevent intersections)
+        cursorMass: 70,
+        autonomousMass: 50,
+        softeningLength: 35,
+        maxDisplacement: 18,
     };
 }
 
 let CONFIG = getConfig();
 
-// Theme management
 function getStoredTheme() {
     return localStorage.getItem('theme') || null;
 }
@@ -49,33 +39,19 @@ function setTheme(theme) {
         document.documentElement.removeAttribute('data-theme');
         localStorage.removeItem('theme');
     }
-    // Update canvas config
     CONFIG = getConfig();
 }
 
 function initTheme() {
-    const storedTheme = getStoredTheme();
-    if (storedTheme) {
-        setTheme(storedTheme);
-    } else {
-        // Don't set theme - let CSS handle system preference via media query
-        // Just update config based on current system preference
-        const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-        CONFIG = getConfig();
-    }
+    const stored = getStoredTheme();
+    if (stored) setTheme(stored);
+    else CONFIG = getConfig();
 }
-
-// Initialize theme on load
 initTheme();
 
-// Update config on system theme change (only if no stored preference)
 if (window.matchMedia) {
-    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
-        if (!getStoredTheme()) {
-            // Don't set theme attribute - let CSS handle it
-            // Just update config
-            CONFIG = getConfig();
-        }
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
+        if (!getStoredTheme()) CONFIG = getConfig();
     });
 }
 
@@ -101,11 +77,10 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
-    // Track mouse position with smoother updates
-    document.addEventListener('mousemove', (e) => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-    }, { passive: true });
+document.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+}, { passive: true });
 
 document.addEventListener('mouseleave', () => {
     mouse.x = -1000;
@@ -187,20 +162,13 @@ class GridNavigator {
         const baseX = this.gridCol * spacing;
         const baseY = this.gridRow * spacing;
         
-        // Direction vectors
         const dx = [1, 0, -1, 0][this.direction];
         const dy = [0, 1, 0, -1][this.direction];
-        
-        // Smooth easing for natural movement
-        const easedProgress = this.progress;
-        
-        // Calculate position ensuring it stays on grid lines
-        this.x = baseX + dx * spacing * easedProgress;
-        this.y = baseY + dy * spacing * easedProgress;
+        this.x = baseX + dx * spacing * this.progress;
+        this.y = baseY + dy * spacing * this.progress;
     }
 }
 
-// Create three masses that navigate the grid
 const masses = [
     new GridNavigator(CONFIG.autonomousMass * 1.2, 0.8, 8, 5),
     new GridNavigator(CONFIG.autonomousMass * 1.0, 1.0, 15, 10),
@@ -209,15 +177,11 @@ const masses = [
     new GridNavigator(CONFIG.autonomousMass * 1.5, 1.2, 38, 9),
 ];
 
-// Physics-informed gravitational potential
-// Uses Plummer softening to prevent singularities: φ = -M / sqrt(r² + ε²)
 function calculatePotentialGradient(px, py, massX, massY, mass, softening) {
     const dx = px - massX;
     const dy = py - massY;
     const r2 = dx * dx + dy * dy;
     const softened = Math.sqrt(r2 + softening * softening);
-    
-    // Gradient of Plummer potential: ∇φ = M * r / (r² + ε²)^(3/2)
     const factor = mass / (softened * softened * softened);
     
     return {
@@ -226,12 +190,9 @@ function calculatePotentialGradient(px, py, massX, massY, mass, softening) {
     };
 }
 
-// Calculate displacement using proper potential field superposition
 function calculateDisplacement(px, py, allMasses, mouseX, mouseY) {
     let totalGx = 0;
     let totalGy = 0;
-
-    // Superpose gravitational influences from all masses
     for (const mass of allMasses) {
         const { gx, gy } = calculatePotentialGradient(
             px, py, mass.x, mass.y, mass.mass, CONFIG.softeningLength
@@ -239,8 +200,6 @@ function calculateDisplacement(px, py, allMasses, mouseX, mouseY) {
         totalGx += gx;
         totalGy += gy;
     }
-
-    // Add cursor influence with same physics
     if (mouseX > 0 && mouseY > 0) {
         const { gx, gy } = calculatePotentialGradient(
             px, py, mouseX, mouseY, CONFIG.cursorMass, CONFIG.softeningLength * 0.8
@@ -248,20 +207,12 @@ function calculateDisplacement(px, py, allMasses, mouseX, mouseY) {
         totalGx += gx;
         totalGy += gy;
     }
-
-    // Scale to visual displacement - balanced for smooth, visible effect
     const scale = 1000;
     let dx = totalGx * scale;
     let dy = totalGy * scale;
-
-    // Strict clamp to prevent topology violations (grid lines crossing)
-    // Critical: maxDisplacement must be < gridSpacing/2 to guarantee no intersections
-    // Using smooth tanh limiting ensures continuous, differentiable warping
     const magnitude = Math.sqrt(dx * dx + dy * dy);
     if (magnitude > 0) {
         const maxDisp = CONFIG.maxDisplacement;
-        // Tanh limiting: smooth, continuous, and strictly bounded
-        // tanh(x) approaches 1 as x -> infinity, so limited <= maxDisp always
         const limited = maxDisp * Math.tanh(magnitude / maxDisp);
         const ratio = limited / magnitude;
         dx *= ratio;
@@ -271,7 +222,6 @@ function calculateDisplacement(px, py, allMasses, mouseX, mouseY) {
     return { dx, dy };
 }
 
-// Pre-calculate warped grid positions for consistency
 function calculateWarpedGrid() {
     const spacing = CONFIG.gridSpacing;
     const cols = Math.ceil(width / spacing) + 4;
@@ -298,14 +248,11 @@ function calculateWarpedGrid() {
     return { grid, rows, cols };
 }
 
-// Draw the warped grid using pre-calculated positions
 function drawGrid() {
     const { grid, rows, cols } = calculateWarpedGrid();
 
     ctx.strokeStyle = CONFIG.gridColor;
     ctx.lineWidth = CONFIG.gridLineWidth;
-
-    // Draw horizontal lines
     for (let row = 0; row <= rows; row++) {
         ctx.beginPath();
         for (let col = 0; col <= cols; col++) {
@@ -318,8 +265,6 @@ function drawGrid() {
         }
         ctx.stroke();
     }
-
-    // Draw vertical lines
     for (let col = 0; col <= cols; col++) {
         ctx.beginPath();
         for (let row = 0; row <= rows; row++) {
@@ -334,22 +279,16 @@ function drawGrid() {
     }
 }
 
-// Draw subtle node markers at mass positions
 function drawNodes() {
     for (const mass of masses) {
-        // Calculate where the node appears in warped space
         const { dx, dy } = calculateDisplacement(mass.x, mass.y, 
             masses.filter(m => m !== mass), smoothMouse.x, smoothMouse.y);
         const nodeX = mass.x + dx * 0.3;
         const nodeY = mass.y + dy * 0.3;
-        
-        // Draw a subtle mathematical node - small filled circle
         ctx.beginPath();
         ctx.arc(nodeX, nodeY, CONFIG.nodeRadius, 0, Math.PI * 2);
         ctx.fillStyle = CONFIG.nodeColor;
         ctx.fill();
-        
-        // Outer ring for elegance
         ctx.beginPath();
         ctx.arc(nodeX, nodeY, CONFIG.nodeRadius * 2.2, 0, Math.PI * 2);
         ctx.strokeStyle = CONFIG.nodeRingColor;
@@ -358,42 +297,21 @@ function drawNodes() {
     }
 }
 
-// Animation loop
 let lastTime = 0;
-
 function animate(currentTime) {
     const dt = Math.min((currentTime - lastTime) / 1000, 0.1);
     lastTime = currentTime;
-
-    // Smooth mouse interpolation for natural feel
     const smoothing = 0.15;
     smoothMouse.x += (mouse.x - smoothMouse.x) * smoothing;
     smoothMouse.y += (mouse.y - smoothMouse.y) * smoothing;
-
-    // Clear canvas
     ctx.clearRect(0, 0, width, height);
-
-    // Update masses
-    for (const mass of masses) {
-        mass.update(dt);
-    }
-
-    // Draw elements
+    for (const mass of masses) mass.update(dt);
     drawGrid();
     drawNodes();
-
     requestAnimationFrame(animate);
 }
-
-// Start animation
 requestAnimationFrame(animate);
 
-
-// ============================================
-// EXISTING SITE FUNCTIONALITY
-// ============================================
-
-// Mobile menu toggle
 function initMobileMenu() {
     const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
     const nav = document.querySelector('.nav');
@@ -411,105 +329,52 @@ function initMobileMenu() {
         nav.classList.toggle('mobile-open');
         mobileMenuToggle.classList.toggle('active');
     });
-    
-    // Close menu when clicking on nav links
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-            closeMobileMenu();
-        });
-    });
-    
-    // Prevent clicks inside the menu from closing it
-    navRight.addEventListener('click', (e) => {
-        e.stopPropagation();
-    });
-    
-    // Close menu when clicking outside (on the backdrop)
+    document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', closeMobileMenu));
+    navRight.addEventListener('click', (e) => e.stopPropagation());
     document.addEventListener('click', (e) => {
-        if (nav.classList.contains('mobile-open')) {
-            // Check if click is outside the menu
-            if (!navRight.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
-                closeMobileMenu();
-            }
-        }
+        if (nav.classList.contains('mobile-open') && !navRight.contains(e.target) && !mobileMenuToggle.contains(e.target)) closeMobileMenu();
     });
-    
-    // Close menu on escape key
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && nav.classList.contains('mobile-open')) {
-            closeMobileMenu();
-        }
+        if (e.key === 'Escape' && nav.classList.contains('mobile-open')) closeMobileMenu();
     });
 }
 
-// Initialize mobile menu when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMobileMenu);
-} else {
-    initMobileMenu();
-}
-
-// Intersection observer for fade-in animations
 const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('is-visible');
-    });
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('is-visible'); });
 }, { threshold: 0.15 });
-
 document.querySelectorAll('.fade-in, .fade-in-item').forEach(el => {
-    if (el.classList.contains('hero')) {
-        setTimeout(() => el.classList.add('is-visible'), 100);
-    }
+    if (el.classList.contains('hero')) setTimeout(() => el.classList.add('is-visible'), 100);
     observer.observe(el);
 });
 
-// Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', e => {
         const href = anchor.getAttribute('href');
         if (href === '#' || href === '#top') return;
         e.preventDefault();
         const target = document.querySelector(href);
-        if (target) {
-            window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - 100, behavior: 'smooth' });
-        }
+        if (target) window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - 100, behavior: 'smooth' });
     });
 });
 
-// Theme toggle button
 const themeToggle = document.getElementById('theme-toggle');
 if (themeToggle) {
     themeToggle.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme') || 
-                            (isLightMode() ? 'light' : 'dark');
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        setTheme(newTheme);
+        const current = document.documentElement.getAttribute('data-theme') || (isLightMode() ? 'light' : 'dark');
+        setTheme(current === 'light' ? 'dark' : 'light');
     });
 }
 
-// Sticky navbar scroll detection
 function handleNavbarScroll() {
     const hero = document.querySelector('.hero');
     if (!hero) return;
-    
-    const heroBottom = hero.getBoundingClientRect().bottom;
-    const scrollThreshold = 100; // Show border when scrolled past this point
-    
-    if (window.scrollY > scrollThreshold || heroBottom < scrollThreshold) {
-        document.body.classList.add('scrolled');
-    } else {
-        document.body.classList.remove('scrolled');
-    }
+    const threshold = 100;
+    const on = window.scrollY > threshold || hero.getBoundingClientRect().bottom < threshold;
+    document.body.classList.toggle('scrolled', on);
 }
-
-// Check on scroll and on load
 window.addEventListener('scroll', handleNavbarScroll);
 window.addEventListener('resize', handleNavbarScroll);
-handleNavbarScroll(); // Initial check
-
-// ============================================
-// CONTACT FORM HANDLING (Web3Forms)
-// ============================================
+handleNavbarScroll();
 
 function initContactForm() {
     const form = document.getElementById('contact-form');
@@ -542,103 +407,39 @@ function initContactForm() {
             body: json
         })
         .then(async (response) => {
-            let json = await response.json();
-            if (response.status == 200) {
-                result.innerHTML = json.message;
-                result.className = "form-message show success";
-            } else {
-                console.log(response);
-                result.innerHTML = json.message || "Something went wrong. Please try again.";
-                result.className = "form-message show error";
-            }
+            const json = await response.json();
+            const ok = response.status === 200;
+            result.innerHTML = ok ? json.message : (json.message || "Something went wrong. Please try again.");
+            result.className = "form-message show " + (ok ? "success" : "error");
         })
-        .catch(error => {
-            console.log(error);
+        .catch(() => {
             result.innerHTML = "Something went wrong! Please try again or email us directly at contact@gridworld.ai";
             result.className = "form-message show error";
         })
-        .then(function() {
-            if (submitButton) {
-                submitButton.disabled = false;
-                submitButton.textContent = "Submit";
-            }
+        .finally(() => {
+            if (submitButton) { submitButton.disabled = false; submitButton.textContent = "Submit"; }
             form.reset();
-            setTimeout(() => {
-                result.className = "form-message";
-                result.innerHTML = "";
-            }, 5000);
+            setTimeout(() => { result.className = "form-message"; result.innerHTML = ""; }, 5000);
         });
     });
 }
-
-// Initialize contact form when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initContactForm);
-} else {
-    initContactForm();
-}
-
-// ============================================
-// IMAGE PROTECTION - Prevent copying/saving images (except logos)
-// ============================================
 
 function initImageProtection() {
-    // Select all images except logos
-    const protectedImages = document.querySelectorAll('img:not(.logo img):not(.footer-logo img)');
-    
-    protectedImages.forEach(img => {
-        // Prevent right-click context menu
-        img.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            return false;
-        });
-        
-        // Prevent drag start
-        img.addEventListener('dragstart', (e) => {
-            e.preventDefault();
-            return false;
-        });
-        
-        // Prevent selecting images
-        img.addEventListener('selectstart', (e) => {
-            e.preventDefault();
-            return false;
-        });
-        
-        // Add CSS class for additional protection
-        img.classList.add('protected-image');
+    const images = document.querySelectorAll('img:not(.logo img):not(.footer-logo img)');
+    images.forEach(img => {
+        img.addEventListener('contextmenu', (e) => e.preventDefault());
+        img.addEventListener('selectstart', (e) => e.preventDefault());
     });
-    
-    // Prevent keyboard shortcuts for saving images
-    document.addEventListener('keydown', (e) => {
-        // Prevent Ctrl+S, Ctrl+Shift+S, Ctrl+U
-        if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) {
-            const activeElement = document.activeElement;
-            const isImageSelected = activeElement && activeElement.tagName === 'IMG' && 
-                                   !activeElement.closest('.logo') && 
-                                   !activeElement.closest('.footer-logo');
-            if (isImageSelected) {
-                e.preventDefault();
-                return false;
-            }
-        }
-    });
-    
-    // Prevent image dragging
     document.addEventListener('dragstart', (e) => {
-        if (e.target.tagName === 'IMG' && 
-            !e.target.closest('.logo') && 
-            !e.target.closest('.footer-logo')) {
-            e.preventDefault();
-            return false;
-        }
+        if (e.target.tagName === 'IMG' && !e.target.closest('.logo') && !e.target.closest('.footer-logo')) e.preventDefault();
     });
 }
 
-// Initialize image protection when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initImageProtection);
+    document.addEventListener('DOMContentLoaded', () => { initMobileMenu(); initContactForm(); initImageProtection(); });
 } else {
+    initMobileMenu();
+    initContactForm();
     initImageProtection();
 }
 
