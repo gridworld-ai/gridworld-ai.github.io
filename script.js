@@ -248,8 +248,8 @@ function calculateWarpedGrid() {
     return { grid, rows, cols };
 }
 
-function drawGrid() {
-    const { grid, rows, cols } = calculateWarpedGrid();
+function drawGrid(warpedGrid) {
+    const { grid, rows, cols } = warpedGrid;
 
     ctx.strokeStyle = CONFIG.gridColor;
     ctx.lineWidth = CONFIG.gridLineWidth;
@@ -279,12 +279,29 @@ function drawGrid() {
     }
 }
 
-function drawNodes() {
+function drawNodes(warpedGrid) {
+    const { grid, rows, cols } = warpedGrid;
+    const offsetCols = 2; // matches offsetX = -spacing*2 in calculateWarpedGrid
+    const offsetRows = 2;
+
     for (const mass of masses) {
-        const { dx, dy } = calculateDisplacement(mass.x, mass.y, 
-            masses.filter(m => m !== mass), smoothMouse.x, smoothMouse.y);
-        const nodeX = mass.x + dx * 0.3;
-        const nodeY = mass.y + dy * 0.3;
+        const c = mass.gridCol + offsetCols;
+        const r = mass.gridRow + offsetRows;
+        if (r < 0 || r > rows || c < 0 || c > cols) continue;
+
+        const dx = [1, 0, -1, 0][mass.direction];
+        const dy = [0, 1, 0, -1][mass.direction];
+        const c2 = Math.min(cols, Math.max(0, c + dx));
+        const r2 = Math.min(rows, Math.max(0, r + dy));
+
+        const p0 = grid[r][c];
+        const p1 = grid[r2][c2];
+        const t = mass.progress;
+
+        // Interpolate along the warped segment — dot is exactly on the line
+        const nodeX = p0.x + (p1.x - p0.x) * t;
+        const nodeY = p0.y + (p1.y - p0.y) * t;
+
         ctx.beginPath();
         ctx.arc(nodeX, nodeY, CONFIG.nodeRadius, 0, Math.PI * 2);
         ctx.fillStyle = CONFIG.nodeColor;
@@ -306,8 +323,9 @@ function animate(currentTime) {
     smoothMouse.y += (mouse.y - smoothMouse.y) * smoothing;
     ctx.clearRect(0, 0, width, height);
     for (const mass of masses) mass.update(dt);
-    drawGrid();
-    drawNodes();
+    const warpedGrid = calculateWarpedGrid();
+    drawGrid(warpedGrid);
+    drawNodes(warpedGrid);
     requestAnimationFrame(animate);
 }
 requestAnimationFrame(animate);
@@ -357,12 +375,29 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-const themeToggle = document.getElementById('theme-toggle');
-if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
-        const current = document.documentElement.getAttribute('data-theme') || (isLightMode() ? 'light' : 'dark');
-        setTheme(current === 'light' ? 'dark' : 'light');
+function initThemeSwitcher() {
+    const buttons = document.querySelectorAll('.theme-option[data-mode]');
+    if (!buttons.length) return;
+
+    function updatePressed() {
+        const stored = getStoredTheme(); // 'light', 'dark', or null (= system)
+        buttons.forEach(btn => {
+            const mode = btn.getAttribute('data-mode');
+            // 'system' button is active when nothing is stored
+            const active = (mode === 'system') ? (stored === null) : (mode === stored);
+            btn.setAttribute('aria-pressed', String(active));
+        });
+    }
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const mode = btn.getAttribute('data-mode');
+            setTheme(mode === 'system' ? null : mode);
+            updatePressed();
+        });
     });
+
+    updatePressed(); // set correct initial state
 }
 
 function handleNavbarScroll() {
@@ -436,10 +471,45 @@ function initImageProtection() {
 }
 
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => { initMobileMenu(); initContactForm(); initImageProtection(); });
+    document.addEventListener('DOMContentLoaded', () => { initMobileMenu(); initContactForm(); initImageProtection(); initThemeSwitcher(); initHmiAnimation(); });
 } else {
     initMobileMenu();
     initContactForm();
     initImageProtection();
+    initThemeSwitcher();
+    initHmiAnimation();
 }
 
+// ============================================================
+// AI-NATIVE HMI ANIMATION — JavaScript
+// Drives the live sensor reading ticker on the Sensors node.
+// Each .hmi-val element has data-min / data-max attributes;
+// this function nudges the displayed value randomly within that
+// range every ~2 seconds to simulate live telemetry streaming.
+// ============================================================
+function initHmiAnimation() {
+    const vals = document.querySelectorAll('.hmi-val');
+    if (!vals.length) return;
+
+    function nudge(el) {
+        const min = parseFloat(el.dataset.min);
+        const max = parseFloat(el.dataset.max);
+        const current = parseFloat(el.textContent);
+        // Small random walk: ±8% of range per tick
+        const step = (max - min) * 0.08;
+        const next = Math.max(min, Math.min(max, current + (Math.random() - 0.5) * 2 * step));
+        // Round to 1 decimal for clean display
+        el.textContent = next.toFixed(1);
+    }
+
+    // Stagger initial ticks so they don't all fire at once
+    vals.forEach((el, i) => {
+        setTimeout(() => {
+            nudge(el);
+            // Continue ticking every 2–3 s with slight jitter
+            setInterval(() => nudge(el), 2000 + Math.random() * 1000);
+        }, i * 800);
+    });
+}
+// END AI-NATIVE HMI ANIMATION — JavaScript
+// ============================================================

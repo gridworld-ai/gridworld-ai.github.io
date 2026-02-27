@@ -8,7 +8,8 @@
     <link rel="apple-touch-icon" href="images/gridworld.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
     <body>
@@ -27,26 +28,9 @@
                 <span></span>
             </button>
             <div class="nav-right">
-                <button class="theme-toggle" aria-label="Toggle theme" id="theme-toggle">
-                    <svg class="theme-icon sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                    <svg class="theme-icon moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                </button>
                 <div class="nav-links">
                     <a href="#about">About</a>
-                    <a href="#approach">Approach</a>
-                    <a href="#contact" class="nav-cta">Book a call</a>
+                    <a href="#contact" class="nav-cta">Book a demo</a>
                 </div>
             </div>
         </nav>
@@ -54,131 +38,352 @@
 
     <main>
         <section id="hero" class="hero fade-in">
-            <h1 class="hero-title">AI for Industrial Processes</h1>
-            <p class="hero-subtitle fade-in-delay">Realizing the future of manufacturing with AI</p>
-            <div class="hero-cta fade-in-delay-2">
-                <a href="#contact" class="cta-link">Book a call</a>
+            <div class="hero-content">
+                <div class="hero-badge fade-in-delay-2">
+                    <span class="hero-badge-label">Supported by:</span>
+                    <img src="images/nvidia-inception-program-badge-rgb-for-screen.svg" width="200" alt="NVIDIA Inception Program" class="inception-badge-img">
+                    &nbsp;
+                    <img src="images/ox1-incubator.png" width="120" alt="Oxford University Incubator" class="incubator-badge-img">
+                </div>
+                <div class="hero-text">
+                    <h1 class="hero-title" style="font-family: 'Symbolica'; font-weight: 300;">The AI Copilot for Industrial Operations</h1>
+                    <p class="hero-subtitle fade-in-delay">Bringing intelligence to industrial monitoring and control</p>
+                    <div class="hero-cta fade-in-delay-2">
+                        <a href="#contact" class="cta-link">Book a demo</a>
+                    </div>
+                </div>
             </div>
-            <div class="hero-badge fade-in-delay-2">
-                <span class="hero-badge-label">Supported by:</span>
-                <img src="images/nvidia-inception-program-badge-rgb-for-screen.svg" width="200" alt="NVIDIA Inception Program" class="inception-badge-img">
+            <div class="hero-content">
+                <div class="hero-featured fade-in-delay-2">
+                    <span class="hero-featured-label">As featured in</span>
+                    <div class="hero-featured-logos">
+                        <img src="images/gravity.png" alt="Gravity">
+                    </div>
+                </div>
             </div>
         </section>
 
         <section id="about" class="intro fade-in">
-            <h2 class="section-title">About Us</h2>
-            <p class="fade-in-delay">
-                Gridworld is an applied research company on a mission to bring forth self-optimizing autonomous factories. We believe that factories of the future will be run completely by AI agents, delivering superhuman performance on throughput, safety, and sustainability.
-                <br><br>
-                We are first tackling thermal processes such as industrial dryers, boilers, and furnaces, where thermal lag and delayed feedback means that performance can be significantly improved with RL-driven long-horizon optimization.
-            </p>
-            <a href="#team" class="cta-link fade-in-delay-2">Meet the Team</a>
+            <div class="intro-card">
+                <h2 class="section-title">About</h2>
+                <p class="fade-in-delay">
+                    <span style="font-size: 1.2rem;">Human-Machine Interfaces (HMIs)</span> are the gateway to industrial monitoring and control, displaying real-time data and alerts from SCADA servers which site operators rely on to make critical decisions.
+                    <br><br>
+                    Gridworld is building <span style="font-size: 1.2rem;">AI-native HMIs</span>, imbuing them with greater agency and intelligence with our context-aware AI copilots.
+                    We deliver superior decision support and democratize your best operators' knowledge and experience, ensuring your sites are always running at peak performance.
+                </p>
+            </div>
+
+            <!-- ============================================================
+                 AI-NATIVE HMI ANIMATION
+                 Illustrates the data flow: Factory → Sensors → SCADA → AI HMI → Operators
+                 All animation logic lives in this block and the CSS section
+                 labelled "AI-NATIVE HMI ANIMATION" in styles.css
+                 ============================================================ -->
+                 <div class="hmi-animation fade-in-delay" aria-label="AI-native HMI diagram: data flows from factory sensors through SCADA into the AI HMI layer which surfaces insights to operators">
+
+                    <!-- Stage labels row (rendered above each node via CSS grid) -->
+    
+                    <!-- ── NODE ROW ── -->
+                    <div class="hmi-nodes">
+    
+                        <!-- NODE 1: Factory -->
+                        <!-- Represents the physical industrial plant: pipes, tanks, machinery -->
+                        <div class="hmi-node hmi-node--factory" data-label="Factory">
+                            <div class="hmi-node-icon">
+                                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                    <!-- Chimney stacks -->
+                                    <rect x="6" y="10" width="6" height="22" rx="1"/>
+                                    <rect x="16" y="16" width="6" height="16" rx="1"/>
+                                    <!-- Building body -->
+                                    <rect x="4" y="32" width="40" height="12" rx="1"/>
+                                    <!-- Windows -->
+                                    <rect x="8" y="35" width="5" height="5" rx="0.5" fill="currentColor" opacity="0.3"/>
+                                    <rect x="17" y="35" width="5" height="5" rx="0.5" fill="currentColor" opacity="0.3"/>
+                                    <rect x="26" y="35" width="5" height="5" rx="0.5" fill="currentColor" opacity="0.3"/>
+                                    <rect x="35" y="35" width="5" height="5" rx="0.5" fill="currentColor" opacity="0.3"/>
+                                    <!-- Smoke puffs (animated via CSS) -->
+                                    <circle class="hmi-smoke hmi-smoke--1" cx="9" cy="8" r="2.5" fill="currentColor" opacity="0.2"/>
+                                    <circle class="hmi-smoke hmi-smoke--2" cx="19" cy="13" r="2" fill="currentColor" opacity="0.15"/>
+                                </svg>
+                            </div>
+                            <span class="hmi-node-label">Site</span>
+                        </div>
+    
+                        <!-- CONNECTOR: Factory → Sensors (pipe/wire line with animated data pulse) -->
+                        <div class="hmi-connector" aria-hidden="true">
+                            <div class="hmi-connector-line">
+                                <div class="hmi-pulse hmi-pulse--1"></div>
+                            </div>
+                            <span class="hmi-connector-label"> </span>
+                        </div>
+    
+                        <!-- NODE 2: Sensors -->
+                        <!-- Temperature, pressure, flow sensors embedded in the plant -->
+                        <div class="hmi-node hmi-node--sensors" data-label="Sensors">
+                            <div class="hmi-node-icon">
+                                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                    <!-- Central sensor body -->
+                                    <circle cx="24" cy="24" r="8"/>
+                                    <!-- Sensor dot -->
+                                    <circle cx="24" cy="24" r="3" fill="currentColor"/>
+                                    <!-- Measurement ticks -->
+                                    <line x1="24" y1="4" x2="24" y2="8"/>
+                                    <line x1="24" y1="40" x2="24" y2="44"/>
+                                    <line x1="4" y1="24" x2="8" y2="24"/>
+                                    <line x1="40" y1="24" x2="44" y2="24"/>
+                                </svg>
+                            </div>
+                            <span class="hmi-node-label">Sensors</span>
+                        </div>
+    
+                        <!-- CONNECTOR: Sensors → SCADA -->
+                        <div class="hmi-connector" aria-hidden="true">
+                            <div class="hmi-connector-line">
+                                <div class="hmi-pulse hmi-pulse--2"></div>
+                            </div>
+                            <span class="hmi-connector-label"> </span>
+                        </div>
+    
+                        <!-- NODE 3: SCADA -->
+                        <!-- Supervisory Control and Data Acquisition server rack -->
+                        <div class="hmi-node hmi-node--scada" data-label="SCADA">
+                            <div class="hmi-node-icon">
+                                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                    <!-- Server rack outline -->
+                                    <rect x="8" y="6" width="32" height="36" rx="2"/>
+                                    <!-- Server blade 1 -->
+                                    <rect x="12" y="10" width="24" height="6" rx="1"/>
+                                    <circle cx="32" cy="13" r="1.5" fill="currentColor" class="hmi-led hmi-led--green"/>
+                                    <circle cx="36" cy="13" r="1.5" fill="currentColor" class="hmi-led hmi-led--amber"/>
+                                    <!-- Server blade 2 -->
+                                    <rect x="12" y="19" width="24" height="6" rx="1"/>
+                                    <circle cx="32" cy="22" r="1.5" fill="currentColor" class="hmi-led hmi-led--green"/>
+                                    <circle cx="36" cy="22" r="1.5" fill="currentColor" class="hmi-led hmi-led--green"/>
+                                    <!-- Server blade 3 -->
+                                    <rect x="12" y="28" width="24" height="6" rx="1"/>
+                                    <circle cx="32" cy="31" r="1.5" fill="currentColor" class="hmi-led hmi-led--amber"/>
+                                    <circle cx="36" cy="31" r="1.5" fill="currentColor" class="hmi-led hmi-led--green"/>
+                                    <!-- Base vents -->
+                                    <line x1="14" y1="38" x2="20" y2="38"/>
+                                    <line x1="22" y1="38" x2="28" y2="38"/>
+                                    <line x1="30" y1="38" x2="36" y2="38"/>
+                                </svg>
+                            </div>
+                            <span class="hmi-node-label">SCADA</span>
+                        </div>
+    
+                        <!-- CONNECTOR: SCADA → AI HMI -->
+                        <div class="hmi-connector" aria-hidden="true">
+                            <div class="hmi-connector-line">
+                                <div class="hmi-pulse hmi-pulse--4"></div>
+                            </div>
+                            <span class="hmi-connector-label"> </span>
+                        </div>
+    
+                        <!-- NODE 4: AI HMI (the hero node — Gridworld's product) -->
+                        <div class="hmi-node hmi-node--hmi" data-label="AI HMI">
+                            <div class="hmi-node-icon hmi-node-icon--hmi">
+                                <!-- Screen bezel -->
+                                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                    <rect x="3" y="6" width="42" height="28" rx="2"/>
+                                    <!-- Screen content: mini chart -->
+                                    <polyline points="8,28 14,20 20,24 26,15 32,19 38,12" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="hmi-chart-line"/>
+                                    <!-- Stand -->
+                                    <line x1="24" y1="34" x2="24" y2="40"/>
+                                    <line x1="16" y1="40" x2="32" y2="40"/>
+                                    <!-- Glow overlay (animated) -->
+                                    <rect x="3" y="6" width="42" height="28" rx="2" class="hmi-screen-glow" fill="currentColor" stroke="none"/>
+                                </svg>
+                            </div>
+                            <span class="hmi-node-label hmi-node-label--hmi">AI HMI</span>
+                        </div>
+
+                        <!-- CONNECTOR: AI HMI → Operators (thicker, highlighted — the key integration) -->
+                        <div class="hmi-connector hmi-connector--ai" aria-hidden="true">
+                            <div class="hmi-connector-line">
+                                <div class="hmi-pulse hmi-pulse--3"></div>
+                                <div class="hmi-pulse hmi-pulse--3b"></div>
+                            </div>
+                            <span class="hmi-connector-label">AI Insights</span>
+                        </div>
+    
+                        <!-- NODE 5: Operators -->
+                        <!-- Human operators who act on the AI's insights -->
+                        <div class="hmi-node hmi-node--operators" data-label="Operators">
+                            <div class="hmi-node-icon">
+                                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                    <!-- Person 1 (foreground) -->
+                                    <circle cx="18" cy="13" r="5"/>
+                                    <path d="M8 34c0-5.5 4.5-10 10-10s10 4.5 10 10" stroke-linecap="round"/>
+                                    <!-- Person 2 (background, offset) -->
+                                    <circle cx="32" cy="11" r="4" opacity="0.6"/>
+                                    <path d="M24 34c0-4.4 3.6-8 8-8s8 3.6 8 8" opacity="0.6" stroke-linecap="round"/>
+                                    <!-- Decision checkmark -->
+                                    <polyline points="28,38 31,42 38,34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hmi-check"/>
+                                </svg>
+                            </div>
+                            <span class="hmi-node-label">Operators</span>
+                        </div>
+    
+                    </div><!-- /.hmi-nodes -->
+    
+                    <!-- Caption beneath the animation -->
+                    <p class="hmi-caption">Real-time data flows from plant sensors through SCADA into the AI HMI layer which surfaces contextual insights directly to operators.</p>
+    
+                </div>
+                <!-- ============================================================
+                     END AI-NATIVE HMI ANIMATION
+                     ============================================================ -->
         </section>
 
-        <section id="approach" class="approach fade-in">
-            <h2 class="section-title">Our Approach</h2>
-            <div class="approach-list">
-                <div class="approach-item fade-in-item">
-                    <span class="approach-number">01</span>
-                    <div class="approach-content">
-                        <h3>High-Fidelity Environments</h3>
-                        <p>Accurate models of your industrial processes, capturing all relevant process variables and interactions.</p>
-                    </div>
-                </div>
-                <div class="approach-item fade-in-item">
-                    <span class="approach-number">02</span>
-                    <div class="approach-content">
-                        <h3>SOP Cloning</h3>
-                        <p>Neural networks that serve as behavioral clones (BC) of your best operators and industrial engineers.</p>
-                    </div>
-                </div>
-                <div class="approach-item fade-in-item">
-                    <span class="approach-number">03</span>
-                    <div class="approach-content">
-                        <h3>RL Post-Training</h3>
-                        <p>Multiple refinements of the SOP BCs using RL within the process environment to achieve a deployable model.</p>
-                    </div>
-                </div>
-                <div class="approach-item fade-in-item">
-                    <span class="approach-number">04</span>
-                    <div class="approach-content">
-                        <h3>Deployable Models</h3>
-                        <p>Ready for decision support, and can serve as an "auto-pilot" for your operations if necessary infrastructures are in place.</p>
-                    </div>
-                </div>
-                <div class="approach-item fade-in-item">
-                    <span class="approach-number">05</span>
-                    <div class="approach-content">
-                        <h3>Enterprise Security</h3>
-                        <p>End-to-end privacy and security guarantees, ensuring your proprietary process data remains protected.</p>
+        <!-- Product subsection -->
+        <section id="product" class="product fade-in">
+
+            <h2 class="section-title">Product</h2>
+
+            <!-- ── Header: headline + CTA ── -->
+            <div class="product-header">
+                <h3 class="product-headline">An <em>intelligent</em> HMI<br>for the modern plant</h3>
+
+                <div class="product-meta">
+                    <p class="product-description">
+                        Built on top of FUXA — the leading open-source SCADA/HMI platform — our AI-native HMI layers context-aware intelligence onto every display your operators use. The same screens, dramatically sharper decisions.
+                    </p>
+
+                    <div class="product-cta-group">
+                        <span class="product-availability">Currently in development</span>
+                        <a href="#contact" class="cta-link product-waitlist-btn">Join the waitlist</a>
+                        <p class="product-oss-note">
+                            Built on <a href="https://github.com/frangoteam/FUXA" target="_blank" rel="noopener noreferrer">FUXA</a> by frangoteam — open source, no runtime licences.
+                        </p>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <section id="technology" class="technology fade-in">
-            <h2 class="section-title">Our Technology</h2>
-            <div class="tech-grid">
-                <div class="tech-card fade-in-item">
-                    <div class="tech-image digital-twin-container">
-                        <img src="images/digital-twin-sample.jpg" alt="Digital Twin Visualization" class="digital-twin-image">
-                    </div>
-                    <h3>High-Fidelity Environments</h3>
-                    <p class="tech-description">Our environments build on top of digital twin formats, and are <strong>purpose-built for AI training</strong>. They're computationally efficient, enabling accelerated simulated experiments necessary for AI training.</p>
+            <!-- ── Feature grid: FUXA's core capabilities, Gridworld-framed ── -->
+            <div class="product-features">
+
+                <!-- Feature 01 -->
+                <div class="product-feature">
+                    <div class="product-feature-index">01 — Connectivity</div>
+                    <div class="product-feature-title">Universal Protocol Support</div>
+                    <p class="product-feature-desc">
+                        Native drivers for Modbus RTU/TCP, OPC-UA, Siemens S7, BACnet IP, MQTT, Ethernet/IP (Allen Bradley), and WebAPI. Connect any device on your plant floor without bespoke integration work.
+                    </p>
                 </div>
-                <div class="tech-card fade-in-item">
-                    <div class="tech-image rl-diagram-container">
-                        <img src="images/rl-loop-sample.png" alt="Reinforcement Learning Process" class="rl-loop-image">
-                    </div>
-                    <h3>Reinforcement Learning</h3>
-                    <p class="tech-description">Reinforcement learning is an AI paradigm where intelligent agents learn optimal strategies beyond human intuition that outperform decades of hand-tuned controllers through iterative loop-based training.</p>
+
+                <!-- Feature 02 -->
+                <div class="product-feature">
+                    <div class="product-feature-index">02 — Visualisation</div>
+                    <div class="product-feature-title">Real-Time Process Views</div>
+                    <p class="product-feature-desc">
+                        Web-based SCADA/HMI editor with drag-and-drop design. Build custom dashboards, P&amp;ID diagrams, animated pipe flows and live-data widgets — entirely in the browser, no client software required.
+                    </p>
                 </div>
+
+                <!-- Feature 03 -->
+                <div class="product-feature">
+                    <div class="product-feature-index">03 — Alarming</div>
+                    <div class="product-feature-title">Threshold Alerts &amp; Notifications</div>
+                    <p class="product-feature-desc">
+                        Define thresholds, trigger conditions, and multi-channel notifications — visual, audible, or email. AI triage surfaces the alerts that actually need operator attention.
+                    </p>
+                </div>
+
+                <!-- Feature 04 -->
+                <div class="product-feature">
+                    <div class="product-feature-index">04 — Historian</div>
+                    <div class="product-feature-title">DAQ &amp; Historical Trending</div>
+                    <p class="product-feature-desc">
+                        Built-in data acquisition stores tag histories. Chart controls render time-series with configurable interpolation. AI surfacing highlights anomalies before they cascade into downtime.
+                    </p>
+                </div>
+
+                <!-- Feature 05 -->
+                <div class="product-feature">
+                    <div class="product-feature-index">05 — Automation</div>
+                    <div class="product-feature-title">Scheduler &amp; Scripting Engine</div>
+                    <p class="product-feature-desc">
+                        Built-in scheduler and scripting layer enable time-based or event-driven automation. Node-RED integration extends to any IIoT workflow without leaving the FUXA environment.
+                    </p>
+                </div>
+
+                <!-- Feature 06 -->
+                <div class="product-feature">
+                    <div class="product-feature-index">06 — Platform</div>
+                    <div class="product-feature-title">Cross-Platform &amp; Edge-Ready</div>
+                    <p class="product-feature-desc">
+                        Full-stack Node.js backend with an Angular/HTML5/SVG frontend. Runs on Windows, Linux, macOS, Raspberry Pi, and Docker. Deploy at the edge or in your cloud — with or without internet access.
+                    </p>
+                </div>
+
+            </div><!-- /.product-features -->
+
+            <!-- ── AI bar: the Gridworld value-add above FUXA ── -->
+            <div class="product-ai-bar">
+                <span class="product-ai-badge">Gridworld AI Layer</span>
+                <p class="product-ai-text">
+                    On top of FUXA's proven SCADA/HMI foundation, Gridworld adds a <strong>context-aware AI copilot</strong> trained on your plant's operational history. It understands your process, your equipment, and your best operators' decision patterns — then surfaces the right information at the right moment, directly inside the HMI your team already uses.
+                </p>
             </div>
+
         </section>
 
+        <!-- About us subsection -->
         <section id="team" class="team fade-in">
-            <h2 class="section-title">Built by Oxford Engineers</h2>
-            <p class="section-intro fade-in-delay">Our team brings deep technical expertise in machine learning and control engineering, as well as industry and research experience in building AI for physical systems.</p>
-            
-            <div class="team-grid">
-                <div class="team-member fade-in-item">
-                    <div class="member-photo">
-                        <img src="images/john_lee.jpeg" alt="John Lee">
-                    </div>
-                    <div class="member-info">
-                        <h3>John Lee</h3>
-                        <span class="member-role">CEO</span>
-                    </div>
-                    <div class="member-social-links">
-                        <a href="https://www.linkedin.com/in/lee-chih-jung" target="_blank" rel="noopener noreferrer" class="member-linkedin" aria-label="John Lee LinkedIn">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                            </svg>
-                        </a>
-                        &nbsp;
-                        <a href="https://www.x.com/lordjatonyas" target="_blank" rel="noopener noreferrer" class="member-linkedin" aria-label="John Lee X">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                            </svg>
-                        </a>
-                    </div>
+        <div class="team-intro">
+            <h2 class="section-title">Who we are</h2>
+            <p class="fade-in-delay">
+                Gridworld is a team from the University of Oxford with strong AI research background and deep connections to the industrial sector. 
+                We believe that the path to Industry 4.0 starts with augmenting existing systems with superhuman-level operational intelligence.
+                Our goal with this is to manufacture industrial intelligence at scale.
+                <br><br>
+                We are still in the early stages. If our mission resonates with you, please reach us at <a href="mailto:contact@gridworld.ai">contact@gridworld.ai</a>.
+            </p>
+        </div>
+        <!-- Team subsection -->
+        <div class="team-grid">
+            <article class="team-member">
+                <div class="member-photo">
+                    <img src="images/john_lee.jpeg" alt="John Lee">
                 </div>
-                
-                <div class="team-member fade-in-item">
-                    <div class="member-photo">
-                        <img src="images/yuhe_gao.jpeg" alt="Yuhe Gao">
-                    </div>
-                    <div class="member-info">
-                        <h3>Yuhe Gao</h3>
-                        <span class="member-role">CTO</span>
-                    </div>
-                    <a href="https://www.linkedin.com/in/yuhe-gao" target="_blank" rel="noopener noreferrer" class="member-linkedin" aria-label="Yuhe Gao LinkedIn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                <div class="member-info">
+                    <h3>John Lee</h3>
+                    <span class="member-role">CEO &nbsp;
+                    <a href="https://www.linkedin.com/in/lee-chih-jung/" target="_blank" rel="noopener noreferrer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
+                            <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 
+                            15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 
+                            3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 
+                            1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 
+                            0 7.225 0 7.225z"/>
+                          </svg>
+                    </a>
+                    </span>
+                </div>
+            </article>
+            <article class="team-member">
+                <div class="member-photo">
+                    <img src="images/yuhe_gao.jpeg" alt="Yuhe Gao">
+                </div>
+                <div class="member-info">
+                    <h3>Yuhe Gao</h3>
+                    <span class="member-role">CTO &nbsp;
+                    <a href="https://www.linkedin.com/in/yuhe-gao/" target="_blank" rel="noopener noreferrer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
+                            <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 
+                            15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 
+                            3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 
+                            1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 
+                            0 7.225 0 7.225z"/>
                         </svg>
                     </a>
+                    </span>
                 </div>
             </div>
+        </article>
+        </div>
         </section>
 
         <section id="contact" class="contact fade-in">
@@ -189,11 +394,13 @@
                         <input type="hidden" name="access_key" value="b4878abc-af33-4e3b-817a-6cea09e0e817">
                         <input type="hidden" name="subject" value="New Contact Form Submission from Gridworld Website">
                         <input type="checkbox" name="botcheck" id="" style="display: none;">
-                        <div class="form-group">
-                            <input type="text" name="name" placeholder="Name" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" name="email" placeholder="Email" required>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" name="name" placeholder="Name" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" name="email" placeholder="Email" required>
+                            </div>
                         </div>
                         <div class="form-group">
                             <input type="text" name="company" placeholder="Company">
@@ -206,7 +413,7 @@
                     </form>
                 </div>
                 <div class="contact-benefits fade-in-delay-2">
-                    <h3>Optimize your industrial processes with AI</h3>
+                    <h3>Upgrade your industrial operations today</h3>
                     <ul class="benefits-list">
                         <li>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -222,13 +429,15 @@
                                 <line x1="16" y1="17" x2="8" y2="17"></line>
                                 <polyline points="10 9 9 9 8 9"></polyline>
                             </svg>
-                            <span>Map out your optimization opportunities</span>
+                            <span>Help us understand your needs</span>
                         </li>
                         <li>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                <!-- Multi-star \"sparkles\" icon to signify AI -->
+                                <path d="M12 3l1.65 3.35L17 8l-3.35 1.65L12 13l-1.65-3.35L7 8l3.35-1.65L12 3z"></path>
+                                <path d="M19 11l0.8 1.6L21.4 13l-1.6 0.4L19 15l-0.8-1.6L16.6 13l1.6-0.4L19 11z"></path>
                             </svg>
-                            <span>Get notified when we are ready to assist you</span>
+                            <span>Get a demo of our AI copilot</span>
                         </li>
                     </ul>
                 </div>
@@ -237,32 +446,37 @@
 
     <footer>
         <div class="footer-content">
-            <div class="footer-column footer-branding">
-                <div class="footer-logo">
-                    <img src="images/gridworld.svg" alt="Gridworld">
-                </div>
-            </div>
             <div class="footer-column footer-navigation">
-                <h4 class="footer-column-title">Navigation</h4>
+                <h4 class="footer-column-title">Company</h4>
                 <ul class="footer-links">
                     <li><a href="#about">About</a></li>
-                    <li><a href="#approach">Approach</a></li>
-                    <li><a href="#contact">Book a call</a></li>
+                    <li><a href="#team">Team</a></li>
+                </ul>
+            </div>
+            <div class="footer-column footer-navigation">
+                <h4 class="footer-column-title">Legal</h4>
+                <ul class="footer-links">
+                    <li><a href="terms.html">Terms of Service</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="data-use.html">Data Use</a></li>
                 </ul>
             </div>
             <div class="footer-column footer-social">
-                <h4 class="footer-column-title">Social</h4>
+                <h4 class="footer-column-title">Connect</h4>
                 <ul class="footer-links">
                     <li>
                         <a href="https://www.linkedin.com/company/gridworld" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                            </svg>
+                            LinkedIn
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://x.com/gridworld_ai" aria-label="X (formerly Twitter)" target="_blank" rel="noopener noreferrer">
+                            X
                         </a>
                     </li>
                 </ul>
             </div>
-            <div class="footer-column footer-contact">
+            <div class="footer-column footer-navigation">
                 <h4 class="footer-column-title">Contact</h4>
                 <ul class="footer-links">
                     <li><a href="mailto:contact@gridworld.ai">contact@gridworld.ai</a></li>
@@ -270,9 +484,37 @@
                 </ul>
             </div>
         </div>
-        <div class="footer-divider"></div>
         <div class="footer-copyright">
-            <p>© 2026 Gridworld. All rights reserved.</p>
+            <p>Gridworld Technologies UK Ltd. © 2026</p>
+            <!-- Theme switcher, inspired by Cursor footer controls -->
+            <div class="theme-switcher" aria-label="Theme mode">
+                <div class="theme-switcher-group" role="radiogroup" aria-label="Color theme">
+                    <button class="theme-option" type="button" data-mode="system" aria-label="System theme" aria-pressed="false">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="14" rx="2"></rect>
+                            <line x1="8" y1="20" x2="16" y2="20"></line>
+                        </svg>
+                    </button>
+                    <button class="theme-option" type="button" data-mode="light" aria-label="Light mode" aria-pressed="false">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="4"></circle>
+                            <line x1="12" y1="2" x2="12" y2="4"></line>
+                            <line x1="12" y1="20" x2="12" y2="22"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="2" y1="12" x2="4" y2="12"></line>
+                            <line x1="20" y1="12" x2="22" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </button>
+                    <button class="theme-option" type="button" data-mode="dark" aria-label="Dark mode" aria-pressed="false">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
         </div>
     </footer>
 
