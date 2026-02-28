@@ -75,7 +75,11 @@ function resizeCanvas() {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
+let _resizeTimer;
+window.addEventListener('resize', () => {
+    clearTimeout(_resizeTimer);
+    _resizeTimer = setTimeout(resizeCanvas, 150);
+});
 
 document.addEventListener('mousemove', (e) => {
     mouse.x = e.clientX;
@@ -359,7 +363,7 @@ function initMobileMenu() {
 
 const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('is-visible'); });
-}, { threshold: 0.15 });
+}, { threshold: 0.05 });
 document.querySelectorAll('.fade-in, .fade-in-item').forEach(el => {
     if (el.classList.contains('hero')) setTimeout(() => el.classList.add('is-visible'), 100);
     observer.observe(el);
@@ -471,13 +475,86 @@ function initImageProtection() {
 }
 
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => { initMobileMenu(); initContactForm(); initImageProtection(); initThemeSwitcher(); initHmiAnimation(); });
+    document.addEventListener('DOMContentLoaded', () => { initMobileMenu(); initContactForm(); initWaitlistModal(); initImageProtection(); initThemeSwitcher(); initHmiAnimation(); });
 } else {
     initMobileMenu();
     initContactForm();
+    initWaitlistModal();
     initImageProtection();
     initThemeSwitcher();
     initHmiAnimation();
+}
+
+function initWaitlistModal() {
+    const modal = document.getElementById('waitlist-modal');
+    const form  = document.getElementById('waitlist-form');
+    const result = document.getElementById('waitlist-result');
+    const closeBtn = modal?.querySelector('.modal-close');
+    const submitButton = form?.querySelector('.form-submit');
+
+    if (!modal) return;
+
+    function openModal() {
+        modal.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modal.classList.remove('is-open');
+        document.body.style.overflow = '';
+        if (result) { result.className = 'form-message'; result.innerHTML = ''; }
+    }
+
+    // Open from every [data-waitlist-trigger] element
+    document.querySelectorAll('[data-waitlist-trigger]').forEach(el => {
+        el.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
+    });
+
+    // Close on backdrop click
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    // Close on × button
+    closeBtn?.addEventListener('click', closeModal);
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+    });
+
+    // Form submission
+    form?.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const json = JSON.stringify(Object.fromEntries(new FormData(form)));
+
+        result.innerHTML = 'Please wait...';
+        result.className = 'form-message show';
+
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
+        }
+
+        fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: json
+        })
+        .then(async (response) => {
+            const data = await response.json();
+            const ok = response.status === 200;
+            result.innerHTML = ok ? "You're on the list! We'll be in touch." : (data.message || 'Something went wrong. Please try again.');
+            result.className = 'form-message show ' + (ok ? 'success' : 'error');
+            if (ok) { form.reset(); setTimeout(closeModal, 2500); }
+        })
+        .catch(() => {
+            result.innerHTML = 'Something went wrong. Please email us at contact@gridworld.ai';
+            result.className = 'form-message show error';
+        })
+        .finally(() => {
+            if (submitButton) { submitButton.disabled = false; submitButton.textContent = 'Join the Waitlist'; }
+        });
+    });
 }
 
 // ============================================================

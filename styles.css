@@ -13,7 +13,7 @@
     --border-color: #2a2a2a;
     --link-color: #ffffff;
     --link-underline-color: #404040;
-    --card-bg: linear-gradient(135deg, rgba(10, 10, 10, 0.85) 0%, rgba(10, 10, 10, 0.75) 100%);
+    --card-bg: rgba(10, 10, 10, 1);
     --card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     --logo-filter: invert(1);
     /* Single source of truth for horizontal content centering */
@@ -32,10 +32,10 @@
     --text-color-light: #4a4a4a;
     --text-color-muted: #6a6a6a;
     --text-color-footer: #888;
-    --border-color: #ddd;
+    --border-color: #7d7777;
     --link-color: #0a0a0a;
     --link-underline-color: #bbb;
-    --card-bg: linear-gradient(135deg, rgba(248, 248, 248, 0.85) 0%, rgba(248, 248, 248, 0.75) 100%);
+    --card-bg: rgba(248, 248, 248, 1);
     --card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
     --logo-filter: invert(0);
     --featured-logo-opacity: 0.7;
@@ -54,7 +54,7 @@
         --border-color: #ddd;
         --link-color: #0a0a0a;
         --link-underline-color: #bbb;
-        --card-bg: linear-gradient(135deg, rgba(248, 248, 248, 0.85) 0%, rgba(248, 248, 248, 0.75) 100%);
+        --card-bg: rgba(248, 248, 248, 1);
         --card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         --logo-filter: invert(0);
         --featured-logo-opacity: 0.7;
@@ -386,8 +386,8 @@ footer {
 }
 
 .hero-title {
-    font-size: 3rem;
-    font-weight: 700;
+    font-size: 3.5rem;
+    font-weight: 300;
     line-height: 1.05;
     margin-bottom: 1.5rem;
     color: var(--link-color);
@@ -402,7 +402,7 @@ footer {
 }
 
 .hero-subtitle {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     line-height: 1.6;
     color: var(--text-color-light);
     max-width: 800px;
@@ -451,7 +451,7 @@ footer {
    ============================================================ */
 
 .section-title {
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     font-weight: 700;
     line-height: 1.15;
     margin-bottom: 2rem;
@@ -470,7 +470,7 @@ footer {
 }
 
 section p {
-    font-size: 1rem;
+    font-size: 1.2rem;
     line-height: 1.7;
     color: var(--text-color);
     margin-bottom: 2rem;
@@ -500,7 +500,7 @@ section a:not(.cta-link):hover {
     display: inline-block;
     color: var(--link-color);
     text-decoration: none;
-    font-size: 0.75rem;
+    font-size: 0.9375rem;
     font-weight: 400;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -573,6 +573,16 @@ section a:not(.cta-link):hover {
     margin-top: 2rem;
 }
 
+.intro-text {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--text-color);
+    margin-bottom: 2rem;
+    max-width: 850px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
 /* ============================================================
    PRODUCT SECTION
    Design language: poolside.ai (bold, editorial, left-aligned)
@@ -598,7 +608,7 @@ section a:not(.cta-link):hover {
 }
 
 .product-headline {
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: 400;
     letter-spacing: -0.04em;
     line-height: 1.1;
@@ -618,7 +628,7 @@ section a:not(.cta-link):hover {
 }
 
 .product-description {
-    font-size: 1rem;
+    font-size: 1.2rem;
     line-height: 1.75;
     color: var(--text-color-light);
     margin: 0;
@@ -742,16 +752,16 @@ section a:not(.cta-link):hover {
 }
 
 .product-feature:hover {
-    background: rgba(255, 255, 255, 0.025);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 [data-theme="light"] .product-feature:hover {
-    background: rgba(0, 0, 0, 0.02);
+    background: rgba(0, 0, 0, 0.05);
 }
 
 /* Feature index number — Symbolica-style monospaced counter */
 .product-feature-index {
-    font-size: 0.65rem;
+    font-size: 1rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--text-color-muted);
@@ -761,7 +771,7 @@ section a:not(.cta-link):hover {
 }
 
 .product-feature-title {
-    font-size: 0.9375rem;
+    font-size: 1.2rem;
     font-weight: 500;
     color: var(--link-color);
     letter-spacing: -0.02em;
@@ -770,54 +780,12 @@ section a:not(.cta-link):hover {
 }
 
 .product-feature-desc {
-    font-size: 0.8375rem;
+    font-size: 1rem;
     line-height: 1.7;
     color: var(--text-color-muted);
     margin: 0;
     max-width: none;
     letter-spacing: 0;
-}
-
-/* ── AI highlight row ─────────────────────────────────────── */
-/* Full-width band below the feature grid — the Gridworld AI layer */
-.product-ai-bar {
-    border: 1px solid rgba(34, 197, 94, 0.25);
-    border-radius: 0;
-    padding: 2rem 2.5rem;
-    display: flex;
-    align-items: flex-start;
-    gap: 2.5rem;
-    background: rgba(34, 197, 94, 0.03);
-}
-
-[data-theme="light"] .product-ai-bar {
-    background: rgba(34, 197, 94, 0.02);
-    border-color: rgba(34, 197, 94, 0.2);
-}
-
-.product-ai-badge {
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #22c55e;
-    font-weight: 600;
-    white-space: nowrap;
-    padding-top: 0.2rem;
-    flex-shrink: 0;
-}
-
-.product-ai-text {
-    font-size: 0.9375rem;
-    line-height: 1.7;
-    color: var(--text-color-light);
-    margin: 0;
-    max-width: 720px;
-    letter-spacing: -0.01em;
-}
-
-.product-ai-text strong {
-    color: var(--link-color);
-    font-weight: 500;
 }
 
 /* ── Mobile product section ───────────────────────────────── */
@@ -829,17 +797,11 @@ section a:not(.cta-link):hover {
         padding-bottom: 2.5rem;
     }
 
-    .product-headline { font-size: 1.75rem; }
+    .product-headline { font-size: 2.5rem; }
     .product-description { max-width: 100%; }
 
     .product-features {
         grid-template-columns: 1fr;
-    }
-
-    .product-ai-bar {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1.5rem;
     }
 }
 
@@ -1401,8 +1363,8 @@ img:not(.logo img):not(.footer-logo img) {
 
 @keyframes hmi-pulse-travel {
     0%   { left: 0%;   opacity: 0; }
-    10%  { opacity: 1; }
-    90%  { opacity: 1; }
+    5%   { opacity: 1; }
+    95%  { opacity: 1; }
     100% { left: 100%; opacity: 0; }
 }
 
@@ -1442,40 +1404,237 @@ img:not(.logo img):not(.footer-logo img) {
     letter-spacing: 0.01em;
 }
 
-/* ── Mobile HMI: scale the desktop layout down, keep it horizontal ─
-   Rather than trying to stack nodes vertically (which broke the
-   connectors and alert bubbles), we scale the whole animation so
-   the desktop pipeline fits on a narrow screen.
-   overflow:hidden on the wrapper clips anything that spills.     */
+/* ── Mobile HMI: 2-row Z-shape layout ──────────────────────────
+   Replaces the scale() shrink with a proper snake layout so nodes
+   stay at full (or near-full) size and nothing goes off-screen.
+
+   Row 1 (top):    Site ← Sensors ← SCADA    (right → left)
+   Vertical drop:  SCADA ↓ AI HMI             (col 1)
+   Row 2 (bottom): AI HMI → AI Insights → Operators  (left → right)
+
+   DOM order: Site(1) conn(2) Sensors(3) conn(4) SCADA(5)
+              conn(6) AIHMI(7) conn-ai(8) Operators(9)
+   CSS Grid re-places each child into the correct cell.           */
 @media (max-width: 768px) {
     .hmi-animation {
-        padding: 1.25rem 0.5rem;
+        padding: 1.75rem 1.5rem;
+        padding-top: 2.5rem;
         margin-top: 2rem;
-        overflow: hidden;
+        max-width: 550px;
+        overflow: visible;
     }
 
-    /* Scale the entire node row to fit within ~calc(100vw - 3rem) */
     .hmi-nodes {
-        transform: scale(0.62);
-        transform-origin: top center;
-        /* After scaling, the element still occupies its pre-scale height.
-           Collapse that dead space so the caption follows naturally.     */
-        margin-bottom: calc((160px * 0.62) - 160px);
+        display: grid;
+        /* Node columns fixed at icon width; connector 1fr columns absorb
+           all remaining space — connectors span exactly from icon edge to
+           icon edge with zero gap.                                        */
+        grid-template-columns: 56px 1fr 56px 1fr 56px;
+        /* Row heights are driven by icon height only (labels are taken out
+           of flow below) so the vertical drop connector lands flush against
+           the SCADA and AI HMI icon boxes.                               */
+        grid-template-rows: auto 48px auto;
+        align-items: center;
+        gap: 0;
+        transform: none;
+        margin-bottom: 0;
+        min-height: unset;
     }
 
-    /* Shrink caption to match the smaller visual */
+    /* Nodes fill their 56px column. Labels are absolutely positioned so
+       they contribute zero height to the grid row — this is what lets the
+       vertical connector reach the icon boxes rather than the label text. */
+    .hmi-nodes > .hmi-node {
+        justify-self: stretch;
+        position: relative;
+        overflow: visible;
+    }
+
+    .hmi-nodes .hmi-node-label {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+    }
+
+    /* Top-row labels float ABOVE the icon so they sit in the animation's
+       top padding and never push the vertical connector gap wider.        */
+    .hmi-nodes > *:nth-child(1) .hmi-node-label,
+    .hmi-nodes > *:nth-child(3) .hmi-node-label,
+    .hmi-nodes > *:nth-child(5) .hmi-node-label {
+        bottom: calc(100% + 0.4rem);
+        top: auto;
+    }
+
+    /* Bottom-row labels sit below the icon, within the animation's
+       bottom padding.                                                     */
+    .hmi-nodes > *:nth-child(7) .hmi-node-label,
+    .hmi-nodes > *:nth-child(9) .hmi-node-label {
+        top: calc(100% + 0.4rem);
+        bottom: auto;
+    }
+
+    /* Icons match the 56px node columns */
+    .hmi-nodes .hmi-node-icon {
+        width: 56px;
+        height: 56px;
+    }
+
+    .hmi-nodes .hmi-node-icon svg {
+        width: 34px;
+        height: 34px;
+    }
+
+    /* Connectors: stretch to the full row height (= icon height = 56px)
+       then use justify-content: center to place the 1 px line at the
+       vertical midpoint — exactly aligned with the icon centres.         */
+    .hmi-nodes > .hmi-connector {
+        align-self: stretch;
+        justify-content: center;
+        min-width: 0;
+    }
+
+    /* ── Row 1 (right-to-left: Site col 5 → SCADA col 1) ──── */
+    .hmi-nodes > *:nth-child(1) { grid-column: 5; grid-row: 1; }              /* Site    */
+    .hmi-nodes > *:nth-child(2) { grid-column: 4; grid-row: 1; transform: scaleX(-1); } /* conn ← */
+    .hmi-nodes > *:nth-child(3) { grid-column: 3; grid-row: 1; }              /* Sensors */
+    .hmi-nodes > *:nth-child(4) { grid-column: 2; grid-row: 1; transform: scaleX(-1); } /* conn ← */
+    .hmi-nodes > *:nth-child(5) { grid-column: 1; grid-row: 1; }              /* SCADA   */
+
+    /* ── Vertical drop (col 1, row 2): SCADA icon bottom → AI HMI icon top
+       With labels out of flow the auto rows are exactly 56 px, so row 2
+       starts at the SCADA box bottom and ends at the AI HMI box top.    */
+    .hmi-nodes > *:nth-child(6) {
+        grid-column: 1;
+        grid-row: 2;
+        justify-self: center;   /* centres the 1 px-wide element in col 1 */
+        width: auto;
+        min-width: 0;
+    }
+
+    .hmi-nodes > *:nth-child(6) .hmi-connector-line {
+        width: 1px;
+        height: 48px;
+    }
+
+    .hmi-nodes > *:nth-child(6) .hmi-pulse {
+        left: 50%;
+        top: 0%;
+        transform: translateX(-50%);
+        animation: hmi-pulse-drop 1.0s linear 0.0s infinite;
+    }
+
+    .hmi-nodes > *:nth-child(6) .hmi-connector-label { display: none; }
+
+    /* ── Row 2 (left-to-right: AI HMI col 1 → Operators col 5) */
+    .hmi-nodes > *:nth-child(7) { grid-column: 1; grid-row: 3; }              /* AI HMI  */
+    .hmi-nodes > *:nth-child(8) { grid-column: 2 / span 3; grid-row: 3; position: relative; } /* AI conn */
+    .hmi-nodes > *:nth-child(9) { grid-column: 5; grid-row: 3; }              /* Operators */
+
+    /* "AI Insights" label: absolutely placed just below the centred line
+       so it doesn't push the line off the icon midpoint.                 */
+    .hmi-nodes > *:nth-child(8) .hmi-connector-label {
+        display: block;
+        position: absolute;
+        top: calc(50% + 4px);
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    /* Blank top-row connector labels — hide so they don't add height */
+    .hmi-nodes > *:nth-child(2) .hmi-connector-label,
+    .hmi-nodes > *:nth-child(4) .hmi-connector-label { display: none; }
+
     .hmi-caption {
-        font-size: 0.72rem !important;
-        margin-top: 0.75rem !important;
+        font-size: 0.8rem !important;
+        margin-top: 1.5rem !important;
     }
+}
 
-    /* Keep connector labels hidden — too small at this scale */
-    .hmi-connector-label { display: none; }
+/* Vertical pulse: travels top-to-bottom along the drop connector */
+@keyframes hmi-pulse-drop {
+    0%   { top: 0%;   opacity: 0; }
+    5%   { opacity: 1; }
+    95%  { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
 }
 
 /* END AI-NATIVE HMI ANIMATION CSS
    ============================================================ */
 
+
+/* ============================================================
+   WAITLIST MODAL
+   ============================================================ */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.modal-overlay.is-open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 460px;
+    margin: 1rem;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.2s ease;
+}
+
+.modal-overlay.is-open .modal-card {
+    transform: translateY(0);
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    color: var(--text-color-muted);
+    border-radius: 4px;
+    transition: color 0.15s ease;
+}
+
+.modal-close:hover { color: var(--text-color); }
+
+.modal-card h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.4rem;
+}
+
+.modal-subtitle {
+    color: var(--text-color-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.75rem;
+}
+
+@media (max-width: 480px) {
+    .modal-card { padding: 1.75rem 1.25rem; }
+}
 
 /* ============================================================
    LEGAL PAGES (terms.html, privacy.html, data-use.html)
@@ -1590,9 +1749,12 @@ img:not(.logo img):not(.footer-logo img) {
        position:fixed children (the panel + backdrop) position
        relative to the pill instead of the viewport — causing
        the right-side gap and preventing the backdrop from showing. */
-    .nav {
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
+    .nav,
+    [data-theme="light"] .nav,
+    html:not([data-theme]) .nav {
+       backdrop-filter: none;
+       -webkit-backdrop-filter: none;
+       background: var(--bg-color);
     }
 
     /* Show hamburger, hide desktop links */
@@ -1658,7 +1820,7 @@ img:not(.logo img):not(.footer-logo img) {
 
     /* ── Hero ─────────────────────────────────────────────── */
     .hero {
-        min-height: calc(120dvh - var(--header-height));
+        min-height: calc(100dvh - var(--header-height));
     }
 
     /* Remove the upward offset — not enough room on mobile */
@@ -1675,8 +1837,8 @@ img:not(.logo img):not(.footer-logo img) {
     .hero-badge-label { font-size: 0.875rem; }
     .hero-badge .inception-badge-img { height: 3rem; }
 
-    .hero-title { font-size: 2rem; }
-    .hero-subtitle { font-size: 1rem; }
+    .hero-title { font-size: 3rem; }
+    .hero-subtitle { font-size: 1.3rem; }
 
     .hero-featured {
         margin-top: 1rem;
@@ -1692,8 +1854,8 @@ img:not(.logo img):not(.footer-logo img) {
         padding-bottom: 4rem;
     }
 
-    .section-title { font-size: 0.75rem; }
-    section p { font-size: 0.9rem; }
+    .section-title { font-size: 1.2rem; }
+    section p { font-size: 1.2rem; }
 
     .cta-link {
         padding: 0.75rem 1.5rem;
