@@ -942,7 +942,7 @@ img:not(.logo img):not(.footer-logo img) {
 }
 
 .contact-benefits h3 {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     font-weight: 400;
     color: var(--link-color);
     margin-bottom: 2rem;
@@ -972,7 +972,7 @@ img:not(.logo img):not(.footer-logo img) {
     stroke-width: 2;
 }
 
-.benefits-list li span { font-size: 0.9rem; }
+.benefits-list li span { font-size: 1rem; }
 
 .form-group { display: flex; flex-direction: column; }
 
