@@ -340,9 +340,11 @@ footer {
    HERO SECTION
    ============================================================ */
 
-/* Override section's vertical padding so flex centering works */
+/* Override section's vertical padding so flex centering works.
+   padding-top ensures a minimum safe gap below the sticky navbar
+   on short desktop viewports (mirrors the mobile margin-top fix). */
 #hero {
-    padding-top: 0;
+    padding-top: 5rem;
     padding-bottom: 0;
 }
 
