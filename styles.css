@@ -1,7 +1,7 @@
 /* ============================================================
    CSS CUSTOM PROPERTIES
    ============================================================ */
-
+    
    :root {
     --bg-color: #0a0a0a;
     --bg-color-alt-1: #130d07;
@@ -13,7 +13,9 @@
     --border-color: #2a2a2a;
     --link-color: #ffffff;
     --link-underline-color: #404040;
+    --card-border-color: #ddd;
     --card-bg: rgba(10, 10, 10, 1);
+    --card-hover-bg: rgba(255, 255, 255, 0.1);
     --card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     --logo-filter: invert(1);
     /* Single source of truth for horizontal content centering */
@@ -32,10 +34,12 @@
     --text-color-light: #4a4a4a;
     --text-color-muted: #6a6a6a;
     --text-color-footer: #888;
-    --border-color: #7d7777;
+    --border-color: #ddd;
     --link-color: #0a0a0a;
     --link-underline-color: #bbb;
+    --card-border-color: #7d7777;
     --card-bg: rgba(248, 248, 248, 1);
+    --card-hover-bg: rgba(0, 0, 0, 0.06);
     --card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
     --logo-filter: invert(0);
     --featured-logo-opacity: 0.7;
@@ -54,7 +58,9 @@
         --border-color: #ddd;
         --link-color: #0a0a0a;
         --link-underline-color: #bbb;
+        --card-border-color: #7d7777;
         --card-bg: rgba(248, 248, 248, 1);
+        --card-hover-bg: rgba(0, 0, 0, 0.06);
         --card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         --logo-filter: invert(0);
         --featured-logo-opacity: 0.7;
@@ -639,29 +645,35 @@ section a:not(.cta-link):hover {
 
 
 /* ── Feature grid ─────────────────────────────────────────── */
-/* 2-column grid of capability cards, poolside-editorial style */
+/* 2-column grid of capability cards */
 .product-features {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0;
-    border-top: 1px solid var(--border-color);
-    border-left: 1px solid var(--border-color);
+    border-top: 1px solid var(--card-border-color);
+    border-left: 1px solid var(--card-border-color);
     margin-bottom: 4rem;
 }
 
 .product-feature {
     padding: 2rem 2rem;
-    border-right: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--card-border-color);
+    border-bottom: 1px solid var(--card-border-color);
     transition: background 0.2s ease;
 }
 
 .product-feature:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--card-hover-bg);
 }
 
-[data-theme="light"] .product-feature:hover {
-    background: rgba(0, 0, 0, 0.05);
+.product-feature-index {
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-color-muted);
+    margin-bottom: 1.25rem;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    opacity: 0.7;
 }
 
 .product-feature-title {
