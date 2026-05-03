@@ -3,7 +3,7 @@
    ============================================================ */
     
    :root {
-    --bg-color: #0a0a0a;
+    --bg-color: #0d0d0d;
     --bg-color-alt-1: #130d07;
     --bg-color-alt-2: #22180e;
     --text-color: #f5f5f5;
@@ -41,9 +41,9 @@
     --card-bg: rgba(248, 248, 248, 1);
     --card-hover-bg: rgba(0, 0, 0, 0.06);
     --card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    --logo-filter: invert(0);
+    --logo-filter: invert(0) grayscale(1);
     --featured-logo-opacity: 0.7;
-    --featured-logo-filter: invert(1) grayscale(100%);
+    --featured-logo-filter: invert(1) grayscale(1);
 }
 
 @media (prefers-color-scheme: light) {
@@ -62,9 +62,9 @@
         --card-bg: rgba(248, 248, 248, 1);
         --card-hover-bg: rgba(0, 0, 0, 0.06);
         --card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        --logo-filter: invert(0);
+        --logo-filter: invert(0) grayscale(1);
         --featured-logo-opacity: 0.7;
-        --featured-logo-filter: invert(1) grayscale(100%);
+        --featured-logo-filter: invert(1) grayscale(1);
     }
 }
 
@@ -390,6 +390,15 @@ footer {
     width: auto;
     height: 4.5rem;
     max-width: 320px;
+    object-fit: contain;
+}
+
+.oxford-badge-img{
+    display: block;
+    filter: var(--logo-filter);
+    width: auto;
+    height: 4.5rem;
+    max-width: 180px;
     object-fit: contain;
 }
 
@@ -1154,7 +1163,7 @@ section a:not(.cta-link):hover {
     }
 
     .hero-badge-label { font-size: 0.875rem; }
-    .hero-badge .inception-badge-img { height: 3rem; }
+    .hero-badge .inception-badge-img .oxford-badge-img { height: 3.5rem; }
 
     .hero-title { font-size: 3rem; }
     .hero-subtitle { font-size: 1.3rem; }
