@@ -642,7 +642,7 @@ section a:not(.cta-link):hover {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #22c55e;
+    background: #e6c07e;
     flex-shrink: 0;
     animation: product-pulse-dot 2.5s ease-in-out infinite;
 }
