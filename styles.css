@@ -642,14 +642,14 @@ section a:not(.cta-link):hover {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #e6c07e;
+    background: #eb1717;
     flex-shrink: 0;
     animation: product-pulse-dot 2.5s ease-in-out infinite;
 }
 
 @keyframes product-pulse-dot {
-    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(219, 162, 61, 0.4); }
-    50%       { opacity: 0.8; box-shadow: 0 0 0 5px rgba(219, 162, 61, 0); }
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(235, 23, 23, 0.4); }
+    50%       { opacity: 0.8; box-shadow: 0 0 0 5px rgba(235, 23, 23, 0); }
 }
 
 
