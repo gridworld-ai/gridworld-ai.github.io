@@ -23,7 +23,7 @@
     /* Featured-in logos: dark theme */
     --featured-logo-opacity: 1;
     --featured-logo-filter: grayscale(0%);
-    --header-height: 1rem;
+    --header-height: 5dvh;
 }
 
 [data-theme="light"] {
@@ -350,12 +350,12 @@ footer {
    padding-top ensures a minimum safe gap below the sticky navbar
    on short desktop viewports (mirrors the mobile margin-top fix). */
 #hero {
-    padding-top: 8rem;
-    padding-bottom: 0;
+    padding-top: 25dvh;
 }
 
 .hero {
     width: 100%;
+    min-height: calc(85dvh - var(--header-height));
     display: flex;
     flex-direction: column;
 }
