@@ -2,7 +2,7 @@
    CSS CUSTOM PROPERTIES
    ============================================================ */
     
-   :root {
+:root {
     --bg-color: #0d0d0d;
     --bg-color-alt-1: #130d07;
     --bg-color-alt-2: #22180e;
@@ -384,9 +384,15 @@ footer {
     object-fit: contain;
 }
 
+.google-badge-img{
+    width: auto;
+    height: 4rem;
+    max-width: 260px;
+    object-fit: contain;
+}
+
 .oxford-badge-img{
     display: block;
-    filter: var(--logo-filter);
     width: auto;
     height: 4rem;
     max-width: 180px;
@@ -870,7 +876,7 @@ section a:not(.cta-link):hover {
 
 .footer-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 3rem;
     margin-bottom: 3rem;
 }
@@ -912,6 +918,11 @@ section a:not(.cta-link):hover {
     font-size: 0.875rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--border-color);
+}
+
+.footer-copyright-text {
+    font-size: 0.875rem;
+    color: var(--text-color-muted);
 }
 
 
