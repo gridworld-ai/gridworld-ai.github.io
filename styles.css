@@ -464,9 +464,12 @@ footer {
     width: auto;
     max-width: 220px;
     object-fit: contain;
+    transition: opacity 0.25s ease, filter 0.25s ease;
+}
+
+.gravity-logo {
     opacity: var(--featured-logo-opacity);
     filter: var(--featured-logo-filter);
-    transition: opacity 0.25s ease, filter 0.25s ease;
 }
 
 
